@@ -1,0 +1,17 @@
+
+public enum TypeCase {
+	VIDE,
+	HERBE,
+	EAU,
+	ROUTEGD,
+	ROUTEHB,
+	ROUTEGH,
+	ROUTEGB,
+	ROUTEHD,
+	ROUTEDB,
+	SAPIN1,
+	SAPIN2,
+	BAT_BASE,
+	BAT_QG,
+	BAT_VILLE;
+}
