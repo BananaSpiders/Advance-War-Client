@@ -74,9 +74,6 @@ public class Menu extends JFrame implements ActionListener{
 		btnJouer.addActionListener(this);
 		contentPane.add(btnJouer);
 		
-		
-		
-		
 		btnEditeur.setBounds(170, 232, 80, 23);
 		btnEditeur.addActionListener(this);
 		contentPane.add(btnEditeur);

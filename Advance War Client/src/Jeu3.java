@@ -80,70 +80,63 @@ public class Jeu3 extends JFrame implements MouseMotionListener, MouseListener,K
 		setSize(Constantes.WIDTH + Constantes.LARGEUR_PANNEAU,
 				Constantes.HEIGHT + Constantes.HAUTEUR_BARRE);
 		setVisible(true);
-		setResizable(false);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setResizable(false); // On empeche le redimensionnement de la fenetre
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // On quitte l'application lorsque l'on clique sur la croix
 		setIgnoreRepaint(true);
 		createBufferStrategy(2);
-		this.addMouseMotionListener(this);
-		this.addMouseListener(this);
-		this.addKeyListener(this);
+
+		// Ajout des différents listeners à la fenetre de jeu
+		this.addMouseMotionListener(this); // Mouvements Souris
+		this.addMouseListener(this);// Clics Souris
+		this.addKeyListener(this); // Clavier
 
 		
 		// Déclaration du curseur
 		this.cursor = new Cursor();
 		
-		this.plateau = Tableau2D.reverse(Xml.Deserialiser(this.carte)); //new Case[Constantes.LARGEUR_TABLEAU][Constantes.HAUTEUR_TABLEAU];
-		this.dessinerTableau();
+		this.plateau = Tableau2D.reverse(Xml.Deserialiser(this.carte)); //On lit le tableau : xml --> Case[][]
+		this.dessinerTableau(); // En fonction du type de case, on affecte l'image correspondante
 
-		this.lesJoueurs = new ArrayList<Joueur>();
+		this.lesJoueurs = new ArrayList<Joueur>(); // On déclare l'ArrayList de 4 joueurs
 		
 		for(int i=0;i<4;i++)
-			this.lesJoueurs.add(new Joueur(i+1));
-		
-
-		
-		
-//		this.lesJoueurs.add(new Joueur("GEOFFREY", 1));
-//		this.lesJoueurs.add(new Joueur("RAMSES", 2));
-//		this.lesJoueurs.add(new Joueur("CHARLY-BG", 3));
+			this.lesJoueurs.add(new Joueur(i+1)); // On instancie les 4 joueurs
 		
 		
 		strategy = getBufferStrategy();
-		buffer = strategy.getDrawGraphics();
-		renderingThread.start();
+		buffer = strategy.getDrawGraphics(); // Lié au double buf
 		
+		renderingThread.start(); // On démarre le thread permettant le rendu graphique ( actualise la fenetre tte les 10 ms)
 		
 	}
 	
 	public void afficheAttente(){
-		buffer.drawImage(new ImageIcon(this.getClass().getResource("wait.png")).getImage(),50, 250, null);
+		buffer.drawImage(new ImageIcon(this.getClass().getResource("wait.png")).getImage(),50, 250, null); // Permet d'afficher l'image "Wait your turn"
 	}
 
 	public void render() {
 		
-		this.afficherPlateau();
+		this.afficherPlateau(); // On affiche d'abord le plateau
 		if (modeDeplacement)
-			this.afficherCercle(1);
+			this.afficherCercle(1); // Puis le cercle noir si l'on se déplace
 		if(attaque)
-			this.afficherCercle(2);
-		this.afficheUnites();
-		this.afficherCurseur();
-		this.afficheInfos();
-		this.afficheUnites();
+			this.afficherCercle(2); // Puis le cercle rouge si l'on attaque
+		this.afficheUnites(); // Puis les unités
+		this.afficherCurseur(); // Le curseur
+		this.afficheInfos();// Affichage du panneau latéral
 		if (achat)
-			afficheBoutonAcheter();
+			afficheBoutonAcheter(); // Affichage du bouton acheter seulement si l'on clique sur notre base
 		if(!this.monTour)
-			afficheAttente();
+			afficheAttente(); // Affiche l'image Wit your turn seulement si ce n'est pas notre tour
 
 		// On envoi toutes les données du buffer vers mémoire vers le buffer
 		// d'affichage
 		strategy.show();
-		//this.owner.threadCo.getSocketOut().println("");
 	}
 
 	public void afficherPopup(String msg)
 	{
-		JOptionPane.showMessageDialog(this.owner, msg);
+		JOptionPane.showMessageDialog(this.owner, msg); // Permet d'afficher un popup
 	}
 	public void dessinerTableau() {
 		ImageIcon herbe = new ImageIcon(this.getClass().getResource("herbe.jpg"));
@@ -153,16 +146,11 @@ public class Jeu3 extends JFrame implements MouseMotionListener, MouseListener,K
 		ImageIcon routeGH = new ImageIcon(this.getClass().getResource("routeGH.jpg"));		
 		ImageIcon routeGB = new ImageIcon(this.getClass().getResource("routeGB.jpg"));		
 		ImageIcon routeHD = new ImageIcon(this.getClass().getResource("routeHD.jpg"));
-		
 		ImageIcon routeDB = new ImageIcon(this.getClass().getResource("routeDB.jpg"));
-		
 		ImageIcon sapin1 = new ImageIcon(this.getClass().getResource("sapin1.jpg"));
 		ImageIcon sapin2 = new ImageIcon(this.getClass().getResource("sapin2.jpg"));
 		
-		
-		
-		
-		
+
 		for (int i = 0; i < 30; i++) {
 			for (int j = 0; j < 20; j++) {
 				
@@ -220,13 +208,6 @@ public class Jeu3 extends JFrame implements MouseMotionListener, MouseListener,K
 			}
 		}
 	}
-	
-//	this.plateau[i][j] = new Case(new ImageIcon(this.getClass()
-//			.getResource("herbe1.jpg")),
-//			i * Constantes.TAILLE_CASE, j * Constantes.TAILLE_CASE,
-//			TypeCase.HERBE, numeroJoueurLocal);
-
-	//
 
 	public void afficherPlateau() {
 		for (int i = 0; i < Constantes.LARGEUR_TABLEAU; i++) {
@@ -281,7 +262,6 @@ public class Jeu3 extends JFrame implements MouseMotionListener, MouseListener,K
 //			 }
 //		 }
 
-		// System.out.println("COUCOU :)");
 		int caseX = e.getX() / Constantes.TAILLE_CASE;
 		int caseY = (e.getY()-Constantes.HAUTEUR_BARRE) / Constantes.TAILLE_CASE;
 
@@ -378,7 +358,9 @@ public class Jeu3 extends JFrame implements MouseMotionListener, MouseListener,K
 				
 				if(tmp1 == null && tmp2 ==null)
 				{
-
+					
+					// Rajouter les tests de déplacements par rapport au terrain (ex: tank ne peut pas aller dans l'eau ni dans la montagne)
+					
 					if(distance<=uniteEnDeplacement.getDeplacementRestant())
 					{
 						String pos;
