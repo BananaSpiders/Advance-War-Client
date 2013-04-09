@@ -363,8 +363,17 @@ public class Jeu3 extends JFrame implements MouseMotionListener, MouseListener,K
 				{
 					
 					// Rajouter les tests de déplacements par rapport au terrain (ex: tank ne peut pas aller dans l'eau ni dans la montagne)
+					boolean deplacementOkay=true;
+					int posXU = sourisX; // en case
+					int posYU = sourisY; // en case
 					
-					if(distance<=uniteEnDeplacement.getDeplacementRestant())
+					// si tank => eau
+					if(this.plateau[posXU][posYU].getTypeCase() == TypeCase.EAU &&  (uniteEnDeplacement instanceof Tank) ){
+						deplacementOkay=false;
+						JOptionPane.showMessageDialog(null, "Deplacement impossible de tank dans l'eau.");
+					}
+						
+					if(distance<=uniteEnDeplacement.getDeplacementRestant() && deplacementOkay==true)
 					{
 						String pos;
 						if(uniteEnDeplacement.getPosX()/30 < 10)
