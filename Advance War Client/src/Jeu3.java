@@ -860,7 +860,22 @@ public class Jeu3 extends JFrame implements MouseMotionListener, MouseListener,K
 			this.monTour = false;
 			this.nbAttaquesRestantes = 2;
 			for(Unite u : this.owner.notreJeu.lesJoueurs.get(numeroJoueurLocal-1).getListeUnites())
-				u.setDeplacementRestant(u.getPtsMvt());	//on r�initilise les points de mouvement
+				u.setDeplacementRestant(u.getPtsMvt());	//on reinitilise les points de mouvement
+			
+			// on donne 200$ par ville capture
+			int salaire = 0;
+			
+			for(int x=0; x<this.plateau.length; x++) // on parcourt toutes les cases du tableau
+				for(int y=0; y<this.plateau[0].length; y++){
+					if(this.plateau[x][y].getAppartient() == numeroJoueurLocal){
+						if(this.plateau[x][y].getTypeCase() == TypeCase.BAT_VILLE){ // si cest un batiment a lui et que cest une ville on add 200 a son salaire
+							salaire += (int)(Math.random() * (200-150)) + 150;;
+						}
+					}
+				}
+			salaire += this.lesJoueurs.get(numeroJoueurLocal-1).getArgent(); // on ajoute largent actuel au salaire
+			this.lesJoueurs.get(numeroJoueurLocal-1).setArgent(salaire); // on lui donne le tout
+			
 				
 			int i;
 			
