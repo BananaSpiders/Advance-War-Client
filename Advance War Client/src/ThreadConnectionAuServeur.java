@@ -8,6 +8,7 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
 
@@ -204,6 +205,22 @@ public class ThreadConnectionAuServeur extends Thread {
 						}
 					}
 
+				}
+				else if(commande.equals("CAP")){ // si une baseville/qg est captuee ( ex : (CAP2x10y09V) )
+					int numeroDeJoueur = Integer.parseInt(str.substring(3,4)); // 0.1.2.3
+					int posX = Integer.parseInt(str.substring(5,7));
+					int posY = Integer.parseInt(str.substring(8,10));
+					String typeBat = str.substring(10,11);
+					
+					System.out.println("Commande : "+commande+" num joueur : "+numeroDeJoueur+" posX : "+posX+"posY : "+posY+" type : "+typeBat);
+					// on modifi les variables en fonction de se que lon a recu
+					this.owner.notreJeu.plateau[posX][posY].setAppartient(numeroDeJoueur+1);
+					if(typeBat.equals("V"))
+						this.owner.notreJeu.plateau[posX][posY].setImageIcon(new ImageIcon(this.getClass().getResource((numeroDeJoueur+1)+"_bat_ville.jpg")));
+					else if(typeBat.equals("B"))
+						this.owner.notreJeu.plateau[posX][posY].setImageIcon(new ImageIcon(this.getClass().getResource((numeroDeJoueur+1)+"_bat_base.jpg")));
+					else if(typeBat.equals("Q"))
+						this.owner.notreJeu.plateau[posX][posY].setImageIcon(new ImageIcon(this.getClass().getResource((numeroDeJoueur+1)+"_bat_qg.jpg")));
 				}
 				else if(commande.equals("MSG")){
 					this.owner.notreJeu.afficherPopup(str.substring(3,str.length()));

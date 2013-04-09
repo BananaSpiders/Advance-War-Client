@@ -29,7 +29,7 @@ public class Jeu3 extends JFrame implements MouseMotionListener, MouseListener,K
 	
 	// Declaration des éléments de jeu
 	// plateau + curseur
-	private Case[][] plateau;// Tableau de Cases -> Plateau de jeu
+	public Case[][] plateau;// Tableau de Cases -> Plateau de jeu
 	private Cursor cursor;// Curseur qui permet de pointer le curseur,tester les
 	private String carte;
 
@@ -467,7 +467,7 @@ public class Jeu3 extends JFrame implements MouseMotionListener, MouseListener,K
 				
 				if(tmp!=null)
 				{
-					JOptionPane.showMessageDialog(this, "Il y a d�ja une unit� sur la base !");
+					JOptionPane.showMessageDialog(this, "Il y a deja une unite sur la base !");
 				}
 				else if(compteUnites(this.lesJoueurs.get(numeroJoueurLocal-1))>=10){
 					JOptionPane.showMessageDialog(this, "Limite de population atteinte !");
@@ -1058,6 +1058,20 @@ public class Jeu3 extends JFrame implements MouseMotionListener, MouseListener,K
 			
 			this.plateau[x][y].setAppartient(numeroJoueurLocal);
 			this.plateau[x][y].setImageIcon(new ImageIcon(this.getClass().getResource((numeroJoueurLocal)+"_bat_ville.jpg")));
+			
+			// on envoie aux autres que lon a capture cette ville
+			String pos;
+			if(x < 10)
+				pos = "x0"+(x);
+			else
+				pos = "x"+(x);
+			if(y < 10)
+				pos += "y0"+(y);
+			else
+				pos += "y"+(y);
+
+			this.owner.threadCo.getSocketOut().println("CAP"+(numeroJoueurLocal-1)+pos+"V"); // ex : (CAP2x10y09V)
+			
 		}
 		
 		// GESTION DE LA CONQUETE DES QG
@@ -1076,6 +1090,19 @@ public class Jeu3 extends JFrame implements MouseMotionListener, MouseListener,K
 			
 			this.plateau[x][y].setAppartient(numeroJoueurLocal);
 			this.plateau[x][y].setImageIcon(new ImageIcon(this.getClass().getResource(numeroJoueurLocal+"_bat_qg.jpg")));
+			
+			// on envoie aux autres que lon a capture cette qg
+			String pos;
+			if(x < 10)
+				pos = "x0"+(x);
+			else
+				pos = "x"+(x);
+			if(y < 10)
+				pos += "y0"+(y);
+			else
+				pos += "y"+(y);
+
+			this.owner.threadCo.getSocketOut().println("CAP"+(numeroJoueurLocal-1)+pos+"Q"); // ex : (CAP2x10y09V)
 		}
 		
 		
@@ -1096,6 +1123,18 @@ public class Jeu3 extends JFrame implements MouseMotionListener, MouseListener,K
 			
 			this.plateau[x][y].setAppartient(numeroJoueurLocal);
 			this.plateau[x][y].setImageIcon(new ImageIcon(this.getClass().getResource(numeroJoueurLocal+"_bat_base.jpg")));
+			
+			// on envoie aux autres que lon a capture cette Base
+			String pos;
+			if(x < 10)
+				pos = "x0"+(x);
+			else
+				pos = "x"+(x);
+			if(y < 10)
+				pos += "y0"+(y);
+			else
+				pos += "y"+(y);
+			this.owner.threadCo.getSocketOut().println("CAP"+(numeroJoueurLocal-1)+pos+"B"); // ex : (CAP2x10y09V)
 		}
 	}
 
