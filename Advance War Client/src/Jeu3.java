@@ -53,6 +53,7 @@ public class Jeu3 extends JFrame implements MouseMotionListener, MouseListener,K
 	private boolean attaque = false;
 	public boolean monTour = false;
 	private int nbAttaquesRestantes;
+	private ImageCase imageCase;// pour charger les imagesCase (sapinn,etc..)
 
 	private Unite uniteEnDeplacement = null;
 	private Unite uniteAttaquee = null;
@@ -90,6 +91,8 @@ public class Jeu3 extends JFrame implements MouseMotionListener, MouseListener,K
 		this.addMouseListener(this);// Clics Souris
 		this.addKeyListener(this); // Clavier
 
+		// On charge les image backGround
+		this.imageCase = new ImageCase();
 		
 		// Déclaration du curseur
 		this.cursor = new Cursor();
@@ -198,7 +201,7 @@ public class Jeu3 extends JFrame implements MouseMotionListener, MouseListener,K
 				case BAT_QG: this.plateau[i][j].setImageIcon(new ImageIcon(this.getClass().getResource(this.plateau[i][j].getAppartient()+"_bat_qg.jpg")));
 					break;
 					
-				case BAT_VILLE: this.plateau[i][j].setImageIcon(new ImageIcon(this.getClass().getResource(this.plateau[i][j].getAppartient()+"_bat_ville.jpg")));
+				case BAT_VILLE: this.plateau[i][j].setImageIcon(this.imageCase.getBat_Ville(this.plateau[i][j].getAppartient())/*new ImageIcon(this.getClass().getResource(this.plateau[i][j].getAppartient()+"_bat_ville.jpg"))*/);
 					break;
 					
 				default:this.plateau[i][j].setImageIcon(new ImageIcon(this.getClass().getResource("herbe.jpg")));

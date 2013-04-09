@@ -129,7 +129,7 @@ public class JPanelChargement extends JPanel {
 			else{				
 				g2d.setColor(Color.BLACK);
 				g2d.drawString("Veuillez attendre", 55, 80); 
-				g2d.drawString("que l'h�te lance la partie.", 45, 95);
+				g2d.drawString("que l'hote lance la partie.", 45, 95);
 
 				/*g2d.setColor(this.couleurCarre);
 					this.posXBalle = this.posXBalle + this.sensBalleX;
