@@ -201,7 +201,7 @@ public class Jeu3 extends JFrame implements MouseMotionListener, MouseListener,K
 				case BAT_QG: this.plateau[i][j].setImageIcon(new ImageIcon(this.getClass().getResource(this.plateau[i][j].getAppartient()+"_bat_qg.jpg")));
 					break;
 					
-				case BAT_VILLE: this.plateau[i][j].setImageIcon(this.imageCase.getBat_Ville(this.plateau[i][j].getAppartient())/*new ImageIcon(this.getClass().getResource(this.plateau[i][j].getAppartient()+"_bat_ville.jpg"))*/);
+				case BAT_VILLE: this.plateau[i][j].setImageIcon(/*this.imageCase.getBat_Ville(this.plateau[i][j].getAppartient())*/new ImageIcon(this.getClass().getResource(this.plateau[i][j].getAppartient()+"_bat_ville.jpg")));
 					break;
 					
 				default:this.plateau[i][j].setImageIcon(new ImageIcon(this.getClass().getResource("herbe.jpg")));
