@@ -131,6 +131,7 @@ public class ConnectionAuServeur extends JFrame implements ActionListener {
 		
 		
 		// Le do while qui attend que coté serveur on appuiiiiiii suuuuuur "Lancer"
+		// love
 		do{
 			System.out.println("");
 		}while(notreJeu.isPartieLancee()==false);
