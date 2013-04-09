@@ -14,7 +14,6 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-
 public class Menu extends JFrame implements ActionListener{
 
 	/**

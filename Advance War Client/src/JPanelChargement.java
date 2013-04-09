@@ -22,7 +22,7 @@ public class JPanelChargement extends JPanel {
 	private boolean deb;
 	public int nbPoint;
 	public boolean mapCharge;
-	private boolean mapChargePremière;
+	private boolean mapChargePremiere;
 	public int posXBalle;
 	public int posYBalle;
 	public int posWBalle;
@@ -47,7 +47,7 @@ public class JPanelChargement extends JPanel {
 		this.nbPoint=1;
 		/*this.paint(getGraphics());*/
 		this.mapCharge = false;
-		this.mapChargePremière = true;
+		this.mapChargePremiere = true;
 		this.isServeurFindFirst = true;
 		this.serveurIsFind = true;
 		this.posXBalle = (int) ((Math.random()*(230-30))+30);
@@ -117,14 +117,14 @@ public class JPanelChargement extends JPanel {
 		}
 		else{
 
-			if(this.mapChargePremière == true){
+			if(this.mapChargePremiere == true){
 				this.setVisible(false);
 				this.setVisible(true);
 				g2d.setColor(Color.WHITE);
 				g2d.fillRect(-100,-100,900,900);
 				g2d.fillRect(-100,-100,900,900);
 				g2d.fillRect(-100,-100,900,900);
-				this.mapChargePremière = false;
+				this.mapChargePremiere = false;
 			}
 			else{				
 				g2d.setColor(Color.BLACK);
