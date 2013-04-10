@@ -1,6 +1,11 @@
 
 public class Tableau2D {
 	
+	/*
+	 * 
+	 *  METHODE STATIC QUI INVERSE UN TABLEAU  LES DONNEES DE LA 1ire dimension vont dans la 2ieme dimension et vis versa
+	 * 
+	 */
 	static Case[][] reverse(Case[][] tabToReverse){
 		// on associe i>x j>y
 		int tailleI = tabToReverse[0].length;
