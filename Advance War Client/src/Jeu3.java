@@ -904,6 +904,8 @@ public class Jeu3 extends JFrame implements MouseMotionListener, MouseListener,K
 					Constantes.HAUTEUR_BARRE + 50);
 			break;
 		}
+		
+		
 
 		// Affichage des infos du joueur
 		buffer.setColor(Color.BLACK);
@@ -935,29 +937,37 @@ public class Jeu3 extends JFrame implements MouseMotionListener, MouseListener,K
 		buffer.fillRect(Constantes.WIDTH + 10,(Constantes.HEIGHT+Constantes.HAUTEUR_BARRE)-160, 180, 150);
 		buffer.setColor(Color.WHITE);
 		
+		// si case contient une unitee adverse on l'affecte a uniteCaseSelect
+		Unite uniteCaseSelect = contientUneUniteAdverse(this.cursor.getPosX()/30,(this.cursor.getPosY()-Constantes.HAUTEUR_BARRE)/30 );
+		// si uniteCaseSelect na rien recu => null on regarde si cest pas une de nos unitée 
+		if(uniteCaseSelect == null ){//zzzzzz
+			uniteCaseSelect = contientUneDeMesUnite(this.lesJoueurs.get(numeroJoueurLocal-1), this.cursor.getPosX()/30,(this.cursor.getPosY()-Constantes.HAUTEUR_BARRE)/30);
+		}
+		
+		
 		String unite = "";
 		
-		if(uniteEnDeplacement instanceof Fusilier)
+		if(uniteCaseSelect instanceof Fusilier)
 			unite = "Fusiller";
-		if(uniteEnDeplacement instanceof Bazooka)
+		if(uniteCaseSelect instanceof Bazooka)
 			unite = "Bazooka";
-		if(uniteEnDeplacement instanceof Jeep)
+		if(uniteCaseSelect instanceof Jeep)
 			unite = "Jeep";
-		if(uniteEnDeplacement instanceof Artillerie)
+		if(uniteCaseSelect instanceof Artillerie)
 			unite = "Artillerie";
-		if(uniteEnDeplacement instanceof Tank)
+		if(uniteCaseSelect instanceof Tank)
 			unite = "Tank";
 		
 		buffer.drawString("Unite : "+unite,Constantes.WIDTH + 15,(Constantes.HEIGHT+Constantes.HAUTEUR_BARRE)-140);
 		
-		if(uniteEnDeplacement != null)
+		if(uniteCaseSelect != null)
 		{
-			buffer.drawString("Attaque : "+uniteEnDeplacement.getAtt(),Constantes.WIDTH + 10,(Constantes.HEIGHT+Constantes.HAUTEUR_BARRE)-120);
-			buffer.drawString("Defense : "+uniteEnDeplacement.getDef(), Constantes.WIDTH + 10,(Constantes.HEIGHT+Constantes.HAUTEUR_BARRE)-100);
-			buffer.drawString("Points de Vie : "+uniteEnDeplacement.getPv(), Constantes.WIDTH + 10,(Constantes.HEIGHT+Constantes.HAUTEUR_BARRE)-80);
-			buffer.drawString("Portee tir : "+uniteEnDeplacement.getPortee(), Constantes.WIDTH + 10,(Constantes.HEIGHT+Constantes.HAUTEUR_BARRE)-60);
-			buffer.drawString("Deplacement max : "+uniteEnDeplacement.getPtsMvt(), Constantes.WIDTH + 10,(Constantes.HEIGHT+Constantes.HAUTEUR_BARRE)-40);
-			buffer.drawString("Deplacement restante : "+uniteEnDeplacement.getDeplacementRestant(), Constantes.WIDTH + 10,(Constantes.HEIGHT+Constantes.HAUTEUR_BARRE)-20);
+			buffer.drawString("Attaque : "+uniteCaseSelect.getAtt(),Constantes.WIDTH + 10,(Constantes.HEIGHT+Constantes.HAUTEUR_BARRE)-120);
+			buffer.drawString("Defense : "+uniteCaseSelect.getDef(), Constantes.WIDTH + 10,(Constantes.HEIGHT+Constantes.HAUTEUR_BARRE)-100);
+			buffer.drawString("Points de Vie : "+uniteCaseSelect.getPv(), Constantes.WIDTH + 10,(Constantes.HEIGHT+Constantes.HAUTEUR_BARRE)-80);
+			buffer.drawString("Portee tir : "+uniteCaseSelect.getPortee(), Constantes.WIDTH + 10,(Constantes.HEIGHT+Constantes.HAUTEUR_BARRE)-60);
+			buffer.drawString("Deplacement max : "+uniteCaseSelect.getPtsMvt(), Constantes.WIDTH + 10,(Constantes.HEIGHT+Constantes.HAUTEUR_BARRE)-40);
+			buffer.drawString("Deplacement restante : "+uniteCaseSelect.getDeplacementRestant(), Constantes.WIDTH + 10,(Constantes.HEIGHT+Constantes.HAUTEUR_BARRE)-20);
 		}
 	}
 	///////////////////////// AFFICHAGE DU BOUTON ACHETER \\\\\\\\\\\\\\\\\\\\\\\\\ 
