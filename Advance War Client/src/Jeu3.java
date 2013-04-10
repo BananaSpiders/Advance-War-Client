@@ -19,15 +19,19 @@ public class Jeu3 extends JFrame implements MouseMotionListener, MouseListener,K
 		/*Jeu3 j = new Jeu3("batman.xml",1);
 		j.setVisible(true);*/
 	}
+	
+	/////////////////////////////////
+	////  ATTRIBUTS DE LA FENETRE //
+	///////////////////////////////
 	private static final long serialVersionUID = 1L;
 
-	//Réseau
+	//Reseau
 	
 	private ConnectionAuServeur owner;
 	private boolean partieLancee;
 	private int totalJoueurs;
 	
-	// Declaration des éléments de jeu
+	// Declaration des �l�ments de jeu
 	// plateau + curseur
 	public Case[][] plateau;// Tableau de Cases -> Plateau de jeu
 	private Cursor cursor;// Curseur qui permet de pointer le curseur,tester les
@@ -57,7 +61,12 @@ public class Jeu3 extends JFrame implements MouseMotionListener, MouseListener,K
 
 	private Unite uniteEnDeplacement = null;
 	private Unite uniteAttaquee = null;
-
+	/////////////////////////////////////////////////////////////////////////////////
+	
+	///////////////////////////////////////////////
+	////  CONSTRUCTEUR DE LA FENETRE PRINCIPALE //
+	/////////////////////////////////////////////
+	
 	public Jeu3(String carte,ConnectionAuServeur connexionServeur,int numeroJoueur) {
 		// Déclaration des differentes variables et listes nécessaires
 		this.caseSelectionnee = TypeCase.HERBE;
@@ -67,16 +76,13 @@ public class Jeu3 extends JFrame implements MouseMotionListener, MouseListener,K
 		
 		this.owner = connexionServeur;
 		this.carte = carte.substring(0, (carte.length()-4)); // ta carte
-//		System.out.println("Carte Construc : "+carte);
 		System.out.println(this.carte);
 		System.out.println(this.numeroJoueurLocal);
 		this.partieLancee=false;
 		this.setTotalJoueurs(0);
 		this.nbAttaquesRestantes = 2;
 		
-		
-		
-		
+
 		// Declaration des parametres propres à la JFrame
 		setSize(Constantes.WIDTH + Constantes.LARGEUR_PANNEAU,
 				Constantes.HEIGHT + Constantes.HAUTEUR_BARRE);
@@ -113,10 +119,11 @@ public class Jeu3 extends JFrame implements MouseMotionListener, MouseListener,K
 		
 	}
 	
-	public void afficheAttente(){
-		buffer.drawImage(new ImageIcon(this.getClass().getResource("wait.png")).getImage(),50, 250, null); // Permet d'afficher l'image "Wait your turn"
-	}
-
+	
+	///////////////////////////////////////////////
+	////            RENDU GRAPHIQUE             //
+	/////////////////////////////////////////////
+	
 	public void render() {
 		
 		this.afficherPlateau(); // On affiche d'abord le plateau
@@ -137,10 +144,6 @@ public class Jeu3 extends JFrame implements MouseMotionListener, MouseListener,K
 		strategy.show();
 	}
 
-	public void afficherPopup(String msg)
-	{
-		JOptionPane.showMessageDialog(this.owner, msg); // Permet d'afficher un popup
-	}
 	public void dessinerTableau() {
 		ImageIcon herbe = new ImageIcon(this.getClass().getResource("herbe.jpg"));
 		ImageIcon eau = new ImageIcon(this.getClass().getResource("eau.jpg"));
@@ -212,26 +215,6 @@ public class Jeu3 extends JFrame implements MouseMotionListener, MouseListener,K
 		}
 	}
 
-	public void afficherPlateau() {
-		for (int i = 0; i < Constantes.LARGEUR_TABLEAU; i++) {
-			for (int j = 0; j < Constantes.HAUTEUR_TABLEAU; j++) {
-				buffer.drawImage(this.plateau[i][j].getImageIcon().getImage(),this.plateau[i][j].getX(), this.plateau[i][j].getY()+ Constantes.HAUTEUR_BARRE, this);
-			}
-		}
-	}
-
-	public void afficherCurseur() {
-		int posX = this.cursor.getPosX();
-		int posY = this.cursor.getPosY();
-
-		int x = posX / Constantes.TAILLE_CASE;
-		int y = posY / Constantes.TAILLE_CASE - 1;
-
-		buffer.drawImage(this.cursor.getImg().getImage(), x
-				* Constantes.TAILLE_CASE, y * Constantes.TAILLE_CASE
-				+ Constantes.HAUTEUR_BARRE, null);
-	}
-
 	@Override
 	public void mouseDragged(MouseEvent e) {
 
@@ -247,23 +230,6 @@ public class Jeu3 extends JFrame implements MouseMotionListener, MouseListener,K
 	public void mouseClicked(MouseEvent e) {
 			if(!this.monTour)
 					return;
-		
-//		System.out.println("Clic X : "+e.getX()+" Clic Y :"+(e.getY()-Constantes.HAUTEUR_BARRE));
-//		System.out.println("Clic X/30 : "+e.getX()/Constantes.TAILLE_CASE+" Clic Y/30 :"+(e.getY()-Constantes.HAUTEUR_BARRE)/Constantes.TAILLE_CASE);
-//		
-//		 System.out.println("CLIC DE LA MORT\n\n");
-//		 for(Joueur j: this.lesJoueurs)
-//		 {
-//			 for(Unite u: j.getListeUnites())
-//			 {
-//				 if(u instanceof Fusilier)
-//				 {
-//					 System.out.println(((Fusilier)u));
-//				 }
-//				 else
-//					 System.out.println(u);
-//			 }
-//		 }
 
 		int caseX = e.getX() / Constantes.TAILLE_CASE;
 		int caseY = (e.getY()-Constantes.HAUTEUR_BARRE) / Constantes.TAILLE_CASE;
@@ -474,22 +440,15 @@ public class Jeu3 extends JFrame implements MouseMotionListener, MouseListener,K
 				
 				System.out.println("tmp "+tmp);
 				
-				if(tmp!=null)
-				{
+				if(tmp!=null){
 					JOptionPane.showMessageDialog(this, "Il y a deja une unite sur la base !");
 				}
 				else if(compteUnites(this.lesJoueurs.get(numeroJoueurLocal-1))>=10){
 					JOptionPane.showMessageDialog(this, "Limite de population atteinte !");
 				}
-				else
-				{
+				else{
 					Achat a = new Achat(this,this.lesJoueurs.get(numeroJoueurLocal-1),this.plateau[baseCourante.getX()/Constantes.TAILLE_CASE][baseCourante.getY()/Constantes.TAILLE_CASE]);
-					
-					
-					
 				}
-					
-					
 			}
 		}
 
@@ -524,25 +483,21 @@ public class Jeu3 extends JFrame implements MouseMotionListener, MouseListener,K
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
 
 	}
 
@@ -579,7 +534,251 @@ public class Jeu3 extends JFrame implements MouseMotionListener, MouseListener,K
 			}
 		}
 	}
+	
+	public int calculeDistance(int x,int y){
+		int uniteX = uniteEnDeplacement.getPosX()/Constantes.TAILLE_CASE;
+		int uniteY = uniteEnDeplacement.getPosY()/Constantes.TAILLE_CASE;
+		
+		int distanceX = uniteX-x;
+		int distanceY = uniteY-y;
+		
+		if(distanceX<0)
+			distanceX *= -1;
+		if(distanceY<0)
+			distanceY *= -1;
+		
+		return (distanceX+distanceY);
+	}
 
+	@Override
+	public void keyTyped(KeyEvent e) {
+		
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		if(!this.monTour)
+			return;
+		if(modeDeplacement)
+		{
+			if(e.getKeyCode()==KeyEvent.VK_A)
+			{
+				MenuAction m = new MenuAction(this);
+				m.setVisible(true);
+			}			
+		}
+		if(e.getKeyCode()==KeyEvent.VK_ESCAPE)
+		{
+			//PASSER TOUR
+			this.monTour = false;
+			this.nbAttaquesRestantes = 2;
+			for(Unite u : this.owner.notreJeu.lesJoueurs.get(numeroJoueurLocal-1).getListeUnites())
+				u.setDeplacementRestant(u.getPtsMvt());	//on reinitilise les points de mouvement
+			
+			// on donne 200$ par ville capture
+			int salaire = 0;
+			
+			for(int x=0; x<this.plateau.length; x++) // on parcourt toutes les cases du tableau
+				for(int y=0; y<this.plateau[0].length; y++){
+					if(this.plateau[x][y].getAppartient() == numeroJoueurLocal){
+						if(this.plateau[x][y].getTypeCase() == TypeCase.BAT_VILLE){ // si cest un batiment a lui et que cest une ville on add 200 a son salaire
+							salaire += (int)(Math.random() * (200-150)) + 150;;
+						}
+					}
+				}
+			salaire += this.lesJoueurs.get(numeroJoueurLocal-1).getArgent(); // on ajoute largent actuel au salaire
+			this.lesJoueurs.get(numeroJoueurLocal-1).setArgent(salaire); // on lui donne le tout
+			
+				
+			int i;
+			
+			if(this.numeroJoueurLocal < this.totalJoueurs)
+				i = this.numeroJoueurLocal+1;
+			else
+				i = 1;		
+			
+			this.owner.threadCo.getSocketOut().println("FIN"+i);
+			this.afficherPopup("C'est le tour du joueur "+i);
+			
+			
+		}
+		if(e.getKeyCode()==KeyEvent.VK_ENTER)
+		{
+			String msg = "Joueur "+numeroJoueurLocal+" : ";
+			msg+=JOptionPane.showInputDialog("Envoyer un message :");
+			this.owner.threadCo.getSocketOut().println("MSG"+msg);
+		}
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	public int compteUnites(Joueur j){
+		int i = 0;
+		
+		for(Unite u: j.getListeUnites()){
+			i++;
+		}
+		return i;
+	}
+	
+	public boolean estVille(int x,int y, int joueur){
+		if((this.plateau[x][y].getTypeCase()==TypeCase.BAT_VILLE) && this.plateau[x][y].getAppartient()==joueur)
+			return true;
+		return false;
+			
+	}
+	
+	public boolean estQG(int x,int y, int joueur){
+		if((this.plateau[x][y].getTypeCase()==TypeCase.BAT_QG) && this.plateau[x][y].getAppartient()==joueur)
+			return true;
+		return false;
+			
+	}
+	
+	public boolean estBase(int x,int y, int joueur){
+		if((this.plateau[x][y].getTypeCase()==TypeCase.BAT_BASE) && this.plateau[x][y].getAppartient()==joueur)
+			return true;
+		return false;
+			
+	}
+	
+	public void gestionCapture(int x,int y){
+		
+		
+		//GESTION DE LA CONQUETE DES VILLES
+		int joueurPerdant = 100;
+		int i = 0;
+		
+		for(i=0;i<5;i++)
+		{
+			if(estVille(x,y,i))
+				joueurPerdant = i;
+		}
+		
+		if(joueurPerdant != 100){
+			this.lesJoueurs.get(numeroJoueurLocal-1).setNombreVilles(this.lesJoueurs.get(numeroJoueurLocal-1).getNombreVilles()+1);// On ajoute une ville au joueur local
+			if(joueurPerdant != 0)
+				this.lesJoueurs.get(joueurPerdant).setNombreVilles(this.lesJoueurs.get(joueurPerdant).getNombreVilles()-1);
+			
+			this.plateau[x][y].setAppartient(numeroJoueurLocal);
+			this.plateau[x][y].setImageIcon(new ImageIcon(this.getClass().getResource((numeroJoueurLocal)+"_bat_ville.jpg")));
+			
+			// on envoie aux autres que lon a capture cette ville
+			String pos;
+			if(x < 10)
+				pos = "x0"+(x);
+			else
+				pos = "x"+(x);
+			if(y < 10)
+				pos += "y0"+(y);
+			else
+				pos += "y"+(y);
+
+			this.owner.threadCo.getSocketOut().println("CAP"+(numeroJoueurLocal-1)+pos+"V"); // ex : (CAP2x10y09V)
+			
+		}
+		
+		// GESTION DE LA CONQUETE DES QG
+		joueurPerdant = 100;
+		
+		for(i=0;i<5;i++)
+		{
+			if(estQG(x,y,i))
+				joueurPerdant = i;
+		}
+		
+		if(joueurPerdant != 100){
+			this.lesJoueurs.get(numeroJoueurLocal-1).setNombreQG(this.lesJoueurs.get(numeroJoueurLocal-1).getNombreQG()+1);// On ajoute une ville au joueur local
+			if(joueurPerdant != 0)
+				this.lesJoueurs.get(joueurPerdant).setNombreQG(this.lesJoueurs.get(joueurPerdant).getNombreQG()-1);
+			
+			this.plateau[x][y].setAppartient(numeroJoueurLocal);
+			this.plateau[x][y].setImageIcon(new ImageIcon(this.getClass().getResource(numeroJoueurLocal+"_bat_qg.jpg")));
+			
+			// on envoie aux autres que lon a capture cette qg
+			String pos;
+			if(x < 10)
+				pos = "x0"+(x);
+			else
+				pos = "x"+(x);
+			if(y < 10)
+				pos += "y0"+(y);
+			else
+				pos += "y"+(y);
+
+			this.owner.threadCo.getSocketOut().println("CAP"+(numeroJoueurLocal-1)+pos+"Q"); // ex : (CAP2x10y09V)
+		}
+		
+		
+		//GESTION DE LA CONQUETE DES BASES
+		joueurPerdant = 100;
+		
+		for(i=0;i<5;i++)
+		{
+			if(estBase(x,y,i))
+				joueurPerdant = i;
+		}
+		
+		if(joueurPerdant != 100){
+			this.lesJoueurs.get(numeroJoueurLocal-1).setNombreBases(this.lesJoueurs.get(numeroJoueurLocal-1).getNombreBases()+1);// On ajoute une ville au joueur local
+			if(joueurPerdant != 0)
+				this.lesJoueurs.get(joueurPerdant).setNombreBases(this.lesJoueurs.get(joueurPerdant).getNombreBases()-1);
+				
+			
+			this.plateau[x][y].setAppartient(numeroJoueurLocal);
+			this.plateau[x][y].setImageIcon(new ImageIcon(this.getClass().getResource(numeroJoueurLocal+"_bat_base.jpg")));
+			
+			// on envoie aux autres que lon a capture cette Base
+			String pos;
+			if(x < 10)
+				pos = "x0"+(x);
+			else
+				pos = "x"+(x);
+			if(y < 10)
+				pos += "y0"+(y);
+			else
+				pos += "y"+(y);
+			this.owner.threadCo.getSocketOut().println("CAP"+(numeroJoueurLocal-1)+pos+"B"); // ex : (CAP2x10y09V)
+		}
+	}
+								///////////////////////////////////////////////
+								////            FONCTIONS D'AFFICHAGE       //
+								/////////////////////////////////////////////
+	
+	//////////AFFICHAGE DU CURSEUR \\\\\\\\\\\\
+	public void afficherPopup(String msg)
+	{
+		JOptionPane.showMessageDialog(this.owner, msg); // Permet d'afficher un popup
+	}
+	///////////////////////////////////////////
+	public void afficherPlateau() {
+		for (int i = 0; i < Constantes.LARGEUR_TABLEAU; i++) {
+			for (int j = 0; j < Constantes.HAUTEUR_TABLEAU; j++) {
+				buffer.drawImage(this.plateau[i][j].getImageIcon().getImage(),this.plateau[i][j].getX(), this.plateau[i][j].getY()+ Constantes.HAUTEUR_BARRE, this);
+			}
+		}
+	}
+	
+	////////// AFFICHAGE DU CURSEUR \\\\\\\\\\\\
+	public void afficherCurseur() {
+		int posX = this.cursor.getPosX();
+		int posY = this.cursor.getPosY();
+
+		int x = posX / Constantes.TAILLE_CASE;
+		int y = posY / Constantes.TAILLE_CASE - 1;
+
+		buffer.drawImage(this.cursor.getImg().getImage(), x
+				* Constantes.TAILLE_CASE, y * Constantes.TAILLE_CASE
+				+ Constantes.HAUTEUR_BARRE, null);
+	}
+	/////////////////////////////////////////////
+	
+	
+	/////// AFFICHAGE DU PANNEAU LATERAL D'INFORMATIONS\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 	public void afficheInfos() {
 		// buffer.drawRect(30*30+10, 10, 180, 100);
 
@@ -592,8 +791,7 @@ public class Jeu3 extends JFrame implements MouseMotionListener, MouseListener,K
 		// gris
 
 		buffer.setColor(Color.BLACK);
-		buffer.fillRect(Constantes.WIDTH + 10, 10 + Constantes.HAUTEUR_BARRE,
-				180, 100); // Rectangle Affichage Joueur
+		buffer.fillRect(Constantes.WIDTH + 10, 10 + Constantes.HAUTEUR_BARRE,180, 100); // Rectangle Affichage Joueur
 		buffer.setColor(Color.WHITE);
 
 		
@@ -743,7 +941,7 @@ public class Jeu3 extends JFrame implements MouseMotionListener, MouseListener,K
 			buffer.drawString("Deplacement restante : "+uniteEnDeplacement.getDeplacementRestant(), Constantes.WIDTH + 10,(Constantes.HEIGHT+Constantes.HAUTEUR_BARRE)-20);
 		}
 	}
-
+	///////////////////////// AFFICHAGE DU BOUTON ACHETER \\\\\\\\\\\\\\\\\\\\\\\\\ 
 	public void afficheBoutonAcheter() {
 		buffer.setColor(Color.black);
 		buffer.fillRect(Constantes.WIDTH + 10,
@@ -754,7 +952,15 @@ public class Jeu3 extends JFrame implements MouseMotionListener, MouseListener,K
 		buffer.drawString("ACHETER", Constantes.WIDTH + 20,
 				10 + Constantes.HAUTEUR_BARRE + 255);
 	}
-
+	///////////////////////////////////////////////////////////////////////////////
+	
+	//////// AFFICHAGE DE L'IMAGE D'ATTENTE ENTRE LES TOURS \\\\\\\\\\\\\\\\\\\\\\\ 
+	public void afficheAttente(){
+		buffer.drawImage(new ImageIcon(this.getClass().getResource("wait.png")).getImage(),50, 250, null); // Permet d'afficher l'image "Wait your turn"
+	}
+	///////////////////////////////////////////////////////////////////////////////
+	
+	///////////////////////// AFFICHAGE DES UNITES \\\\\\\\\\\\\\\\\\\\
 	public void afficheUnites() {
 		for (Joueur j : this.lesJoueurs) {
 			for (Unite u : j.getListeUnites()) {
@@ -798,6 +1004,7 @@ public class Jeu3 extends JFrame implements MouseMotionListener, MouseListener,K
 			}
 		}
 	}
+	/////////////////////////////////////////////////////////////////
 	
 	public void afficherCercle(int mode) {
 		//1: deplacement 2: attaque
@@ -822,94 +1029,34 @@ public class Jeu3 extends JFrame implements MouseMotionListener, MouseListener,K
 		
 		
 	}
+					///////////////////////////////////////////////
+					////            GETTERS AND SETTERS         //
+					/////////////////////////////////////////////
 	
-//	public void afficherCercle() {
-//		buffer.setColor(Color.BLACK);
-//		buffer.drawOval(uniteEnDeplacement.getPosX()- (uniteEnDeplacement.getPtsMvt() * Constantes.TAILLE_CASE)+ (Constantes.TAILLE_CASE) / 2,
-//				uniteEnDeplacement.getPosY()+ 1* Constantes.TAILLE_CASE- (uniteEnDeplacement.getPtsMvt() * Constantes.TAILLE_CASE)+ (Constantes.TAILLE_CASE) / 2,
-//				2 * (uniteEnDeplacement.getPtsMvt() * Constantes.TAILLE_CASE),
-//				2 * (uniteEnDeplacement.getPtsMvt() * Constantes.TAILLE_CASE));
-//	}
+	public boolean isPartieLancee() {
+		return partieLancee;
+	}
+
+	public void setPartieLancee(boolean partieLancee) {
+		this.partieLancee = partieLancee;
+	}
+
+	public int getTotalJoueurs() {
+		return totalJoueurs;
+	}
+
+	public void setTotalJoueurs(int totalJoueurs) {
+		this.totalJoueurs = totalJoueurs;
+	}
 	
-	public int calculeDistance(int x,int y){
-		int uniteX = uniteEnDeplacement.getPosX()/Constantes.TAILLE_CASE;
-		int uniteY = uniteEnDeplacement.getPosY()/Constantes.TAILLE_CASE;
-		
-		int distanceX = uniteX-x;
-		int distanceY = uniteY-y;
-		
-		if(distanceX<0)
-			distanceX *= -1;
-		if(distanceY<0)
-			distanceY *= -1;
-		
-		return (distanceX+distanceY);
+	public ConnectionAuServeur getOwner()
+	{
+		return owner;
 	}
 
-	@Override
-	public void keyTyped(KeyEvent e) {
-		
-	}
-
-	@Override
-	public void keyPressed(KeyEvent e) {
-		if(!this.monTour)
-			return;
-		if(modeDeplacement)
-		{
-			if(e.getKeyCode()==KeyEvent.VK_A)
-			{
-				MenuAction m = new MenuAction(this);
-				m.setVisible(true);
-			}			
-		}
-		if(e.getKeyCode()==KeyEvent.VK_ESCAPE)
-		{
-			//PASSER TOUR
-			this.monTour = false;
-			this.nbAttaquesRestantes = 2;
-			for(Unite u : this.owner.notreJeu.lesJoueurs.get(numeroJoueurLocal-1).getListeUnites())
-				u.setDeplacementRestant(u.getPtsMvt());	//on reinitilise les points de mouvement
-			
-			// on donne 200$ par ville capture
-			int salaire = 0;
-			
-			for(int x=0; x<this.plateau.length; x++) // on parcourt toutes les cases du tableau
-				for(int y=0; y<this.plateau[0].length; y++){
-					if(this.plateau[x][y].getAppartient() == numeroJoueurLocal){
-						if(this.plateau[x][y].getTypeCase() == TypeCase.BAT_VILLE){ // si cest un batiment a lui et que cest une ville on add 200 a son salaire
-							salaire += (int)(Math.random() * (200-150)) + 150;;
-						}
-					}
-				}
-			salaire += this.lesJoueurs.get(numeroJoueurLocal-1).getArgent(); // on ajoute largent actuel au salaire
-			this.lesJoueurs.get(numeroJoueurLocal-1).setArgent(salaire); // on lui donne le tout
-			
-				
-			int i;
-			
-			if(this.numeroJoueurLocal < this.totalJoueurs)
-				i = this.numeroJoueurLocal+1;
-			else
-				i = 1;		
-			
-			this.owner.threadCo.getSocketOut().println("FIN"+i);
-			this.afficherPopup("C'est le tour du joueur "+i);
-			
-			
-		}
-		if(e.getKeyCode()==KeyEvent.VK_ENTER)
-		{
-			String msg = "Joueur "+numeroJoueurLocal+" : ";
-			msg+=JOptionPane.showInputDialog("Envoyer un message :");
-			this.owner.threadCo.getSocketOut().println("MSG"+msg);
-		}
-	}
-
-	@Override
-	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
+	public void setOwner(ConnectionAuServeur owner)
+	{
+		this.owner = owner;
 	}
 	
 	public boolean isAttaque() {
@@ -1032,160 +1179,15 @@ public class Jeu3 extends JFrame implements MouseMotionListener, MouseListener,K
 		this.uniteAttaquee = uniteAttaquee;
 	}
 	
-	public int compteUnites(Joueur j){
-		int i = 0;
-		
-		for(Unite u: j.getListeUnites()){
-			i++;
-		}
-		return i;
-	}
 	
-	public boolean estVille(int x,int y, int joueur){
-		if((this.plateau[x][y].getTypeCase()==TypeCase.BAT_VILLE) && this.plateau[x][y].getAppartient()==joueur)
-			return true;
-		return false;
-			
-	}
-	
-	public boolean estQG(int x,int y, int joueur){
-		if((this.plateau[x][y].getTypeCase()==TypeCase.BAT_QG) && this.plateau[x][y].getAppartient()==joueur)
-			return true;
-		return false;
-			
-	}
-	
-	public boolean estBase(int x,int y, int joueur){
-		if((this.plateau[x][y].getTypeCase()==TypeCase.BAT_BASE) && this.plateau[x][y].getAppartient()==joueur)
-			return true;
-		return false;
-			
-	}
-	
-	public void gestionCapture(int x,int y){
-		
-		
-		//GESTION DE LA CONQUETE DES VILLES
-		int joueurPerdant = 100;
-		int i = 0;
-		
-		for(i=0;i<5;i++)
-		{
-			if(estVille(x,y,i))
-				joueurPerdant = i;
-		}
-		
-		if(joueurPerdant != 100){
-			this.lesJoueurs.get(numeroJoueurLocal-1).setNombreVilles(this.lesJoueurs.get(numeroJoueurLocal-1).getNombreVilles()+1);// On ajoute une ville au joueur local
-			if(joueurPerdant != 0)
-				this.lesJoueurs.get(joueurPerdant).setNombreVilles(this.lesJoueurs.get(joueurPerdant).getNombreVilles()-1);
-			
-			this.plateau[x][y].setAppartient(numeroJoueurLocal);
-			this.plateau[x][y].setImageIcon(new ImageIcon(this.getClass().getResource((numeroJoueurLocal)+"_bat_ville.jpg")));
-			
-			// on envoie aux autres que lon a capture cette ville
-			String pos;
-			if(x < 10)
-				pos = "x0"+(x);
-			else
-				pos = "x"+(x);
-			if(y < 10)
-				pos += "y0"+(y);
-			else
-				pos += "y"+(y);
-
-			this.owner.threadCo.getSocketOut().println("CAP"+(numeroJoueurLocal-1)+pos+"V"); // ex : (CAP2x10y09V)
-			
-		}
-		
-		// GESTION DE LA CONQUETE DES QG
-		joueurPerdant = 100;
-		
-		for(i=0;i<5;i++)
-		{
-			if(estQG(x,y,i))
-				joueurPerdant = i;
-		}
-		
-		if(joueurPerdant != 100){
-			this.lesJoueurs.get(numeroJoueurLocal-1).setNombreQG(this.lesJoueurs.get(numeroJoueurLocal-1).getNombreQG()+1);// On ajoute une ville au joueur local
-			if(joueurPerdant != 0)
-				this.lesJoueurs.get(joueurPerdant).setNombreQG(this.lesJoueurs.get(joueurPerdant).getNombreQG()-1);
-			
-			this.plateau[x][y].setAppartient(numeroJoueurLocal);
-			this.plateau[x][y].setImageIcon(new ImageIcon(this.getClass().getResource(numeroJoueurLocal+"_bat_qg.jpg")));
-			
-			// on envoie aux autres que lon a capture cette qg
-			String pos;
-			if(x < 10)
-				pos = "x0"+(x);
-			else
-				pos = "x"+(x);
-			if(y < 10)
-				pos += "y0"+(y);
-			else
-				pos += "y"+(y);
-
-			this.owner.threadCo.getSocketOut().println("CAP"+(numeroJoueurLocal-1)+pos+"Q"); // ex : (CAP2x10y09V)
-		}
-		
-		
-		//GESTION DE LA CONQUETE DES BASES
-		joueurPerdant = 100;
-		
-		for(i=0;i<5;i++)
-		{
-			if(estBase(x,y,i))
-				joueurPerdant = i;
-		}
-		
-		if(joueurPerdant != 100){
-			this.lesJoueurs.get(numeroJoueurLocal-1).setNombreBases(this.lesJoueurs.get(numeroJoueurLocal-1).getNombreBases()+1);// On ajoute une ville au joueur local
-			if(joueurPerdant != 0)
-				this.lesJoueurs.get(joueurPerdant).setNombreBases(this.lesJoueurs.get(joueurPerdant).getNombreBases()-1);
-				
-			
-			this.plateau[x][y].setAppartient(numeroJoueurLocal);
-			this.plateau[x][y].setImageIcon(new ImageIcon(this.getClass().getResource(numeroJoueurLocal+"_bat_base.jpg")));
-			
-			// on envoie aux autres que lon a capture cette Base
-			String pos;
-			if(x < 10)
-				pos = "x0"+(x);
-			else
-				pos = "x"+(x);
-			if(y < 10)
-				pos += "y0"+(y);
-			else
-				pos += "y"+(y);
-			this.owner.threadCo.getSocketOut().println("CAP"+(numeroJoueurLocal-1)+pos+"B"); // ex : (CAP2x10y09V)
+								///////////////////////////////////////////////
+								////            DEBUG METHODS               //
+								/////////////////////////////////////////////
+	// AFFICHE LA LISTE D'UNITE DU JOUEUR SPECIFIE EN PARAMETRE  : numero dans 1,2,3,4
+	public void afficheUnites(int num){
+		for(Unite u:this.lesJoueurs.get(num-1).getListeUnites()){
+			System.out.println("\nUnit� "+u.getClass().getName()+"\nPosX(case/pixels) : "+u.getPosX()/30+"/"+u.getPosX()
+					+"\n"+u.getPosY()/30+"/"+u.getPosY()+"\nNbVies : "+u.getPv()+"\nNbDeplacementMax : "+u.getPtsMvt()+"\nNbDeplacementMax : "+u.getDeplacementRestant());
 		}
 	}
-
-	public boolean isPartieLancee() {
-		return partieLancee;
-	}
-
-	public void setPartieLancee(boolean partieLancee) {
-		this.partieLancee = partieLancee;
-	}
-
-	public int getTotalJoueurs() {
-		return totalJoueurs;
-	}
-
-	public void setTotalJoueurs(int totalJoueurs) {
-		this.totalJoueurs = totalJoueurs;
-	}
-	
-	public ConnectionAuServeur getOwner()
-	{
-		return owner;
-	}
-
-	public void setOwner(ConnectionAuServeur owner)
-	{
-		this.owner = owner;
-	}
-	
 }
