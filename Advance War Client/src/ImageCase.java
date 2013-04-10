@@ -78,11 +78,11 @@ public class ImageCase {
 		/*
 		 *  Batiments Base
 		 */
-		this.bat_base_0 = new ImageIcon(this.getClass().getResource("0_bat_base.gif"));
-		this.bat_base_1 = new ImageIcon(this.getClass().getResource("1_bat_base.gif"));
-		this.bat_base_2 = new ImageIcon(this.getClass().getResource("2_bat_base.gif"));
-		this.bat_base_3 = new ImageIcon(this.getClass().getResource("3_bat_base.gif"));
-		this.bat_base_4 = new ImageIcon(this.getClass().getResource("4_bat_base.gif"));
+		this.bat_base_0 = new ImageIcon(this.getClass().getResource("0_bat_base.jpg"));
+		this.bat_base_1 = new ImageIcon(this.getClass().getResource("1_bat_base.jpg"));
+		this.bat_base_2 = new ImageIcon(this.getClass().getResource("2_bat_base.jpg"));
+		this.bat_base_3 = new ImageIcon(this.getClass().getResource("3_bat_base.jpg"));
+		this.bat_base_4 = new ImageIcon(this.getClass().getResource("4_bat_base.jpg"));
 		/*
 		 *  Batiments Qg
 		 */
@@ -99,7 +99,7 @@ public class ImageCase {
 		/*
 		 *  Routes
 		 */
-		this.routeGQ = new ImageIcon(this.getClass().getResource("routeGQ.jpg"));
+		this.routeGQ = new ImageIcon(this.getClass().getResource("routeGD.jpg"));
 		this.routeHB = new ImageIcon(this.getClass().getResource("routeHB.jpg"));
 		this.routeGH = new ImageIcon(this.getClass().getResource("routeGH.jpg"));
 		this.routeGB = new ImageIcon(this.getClass().getResource("routeGB.jpg"));

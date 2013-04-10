@@ -10,10 +10,12 @@ public abstract class Unite{
 	protected int att;
 	protected int pv=10;
 	protected boolean accidente;
+	public boolean bMunition;
 	
 	public Unite(int posX,int posY){
 		this.posX = posX;
 		this.posY = posY;
+		this.bMunition = true;
 	}
 
 	public int getPosX() {

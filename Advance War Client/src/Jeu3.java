@@ -68,6 +68,9 @@ public class Jeu3 extends JFrame implements MouseMotionListener, MouseListener,K
 	/////////////////////////////////////////////
 	
 	public Jeu3(String carte,ConnectionAuServeur connexionServeur,int numeroJoueur) {
+		// Declaration du curseur
+		this.cursor = new Cursor();
+		
 		// Déclaration des differentes variables et listes nécessaires
 		this.caseSelectionnee = TypeCase.HERBE;
 		this.numeroJoueurLocal = numeroJoueur; // ton num
@@ -100,8 +103,7 @@ public class Jeu3 extends JFrame implements MouseMotionListener, MouseListener,K
 		// On charge les image backGround
 		this.imageCase = new ImageCase();
 		
-		// Déclaration du curseur
-		this.cursor = new Cursor();
+		
 		
 		this.plateau = Tableau2D.reverse(Xml.Deserialiser(this.carte)); //On lit le tableau : xml --> Case[][]
 		this.dessinerTableau(); // En fonction du type de case, on affecte l'image correspondante
@@ -380,13 +382,27 @@ public class Jeu3 extends JFrame implements MouseMotionListener, MouseListener,K
 				
 				uniteAttaquee = contientUneUniteAdverse(sourisX, sourisY);
 				
-				if(uniteAttaquee != null)
+				// Connaitre l'unite qui vient d'attaquer
+				Unite monUnite = contientUneDeMesUnite(this.owner.notreJeu.getLesJoueurs().get(numeroJoueurLocal-1), uniteEnDeplacement.getPosX()/Constantes.TAILLE_CASE, uniteEnDeplacement.getPosY()/Constantes.TAILLE_CASE);
+				
+				// Si cette unite na plus de munition
+				if(monUnite.bMunition == false)
+					JOptionPane.showMessageDialog(null, "Cette unitee n'a plus de munition.");
+					
+				// si il y a bien un adversert et quil me reste des munitions pour cette unite
+				if(uniteAttaquee != null && monUnite.bMunition == true)
 				{
 					if(distance<=uniteEnDeplacement.getPortee())
 					{	
-						if(this.nbAttaquesRestantes < 1)
+						// Gere le fait que lon peut tirer que deux fois;
+						/*if(this.nbAttaquesRestantes < 1)
 							return;
-						this.nbAttaquesRestantes--;
+						this.nbAttaquesRestantes--;*/
+						
+						// on met les munitions de l'unitee qui vient de tirer a false 
+						monUnite.bMunition = false;
+						
+						
 						this.owner.notreJeu.getLesJoueurs().get(numeroJoueurLocal-1).setArgent(this.owner.notreJeu.getLesJoueurs().get(numeroJoueurLocal-1).getArgent()+200);
 						uniteAttaquee.setPv(uniteAttaquee.pv-uniteEnDeplacement.att+uniteAttaquee.def);
 						String pos;
@@ -455,6 +471,7 @@ public class Jeu3 extends JFrame implements MouseMotionListener, MouseListener,K
 	}
 
 	public Unite contientUneDeMesUnite(Joueur j, int caseX, int caseY) {
+		
 		for (Unite u : j.getListeUnites()) {
 			if ((u.getPosX() / Constantes.TAILLE_CASE) == caseX
 					&& (u.getPosY() / Constantes.TAILLE_CASE) == caseY)
@@ -573,8 +590,10 @@ public class Jeu3 extends JFrame implements MouseMotionListener, MouseListener,K
 			this.monTour = false;
 			this.nbAttaquesRestantes = 2;
 			for(Unite u : this.owner.notreJeu.lesJoueurs.get(numeroJoueurLocal-1).getListeUnites())
+			{
 				u.setDeplacementRestant(u.getPtsMvt());	//on reinitilise les points de mouvement
-			
+				u.bMunition = true;	//on reinitilise les munitions
+			}
 			// on donne 200$ par ville capture
 			int salaire = 0;
 			
