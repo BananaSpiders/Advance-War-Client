@@ -16,20 +16,29 @@ import java.awt.event.ActionEvent;
 
 public class Menu extends JFrame implements ActionListener{
 
-	/**
+	/*
+	 * 
+	 * 		ATTRIBUTS 
 	 * 
 	 */
+	// Panel
 	private JPanel contentPane;
+	// Bouton
 	JButton btnQuitter = new JButton("Quitter");
 	JButton btnCharger = new JButton("Charger");
 	JButton btnEditeur = new JButton("Editeur");
 	JButton btnJouer = new JButton("Rejoindre une partie");
 	JButton btnOption = new JButton("Options");
-	JTextField txtUnknowPlayer=new JTextField();
 	JButton btnRetourOpt = new JButton("Quitter options");
-
-	/**
-	 * Launch the application.
+	// Champ txt
+	JTextField txtUnknowPlayer=new JTextField();
+	
+	
+	
+	/*
+	 * 
+	 * 	MAIN
+	 * 
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -45,8 +54,11 @@ public class Menu extends JFrame implements ActionListener{
 		});
 	}
 
-	/**
-	 * Create the frame.
+
+	/*
+	 * 
+	 * 		CONSTRUCTEUR PAR DEFAUT
+	 * 
 	 */
 	public Menu() {
 		setBackground(Color.WHITE);
@@ -87,27 +99,43 @@ public class Menu extends JFrame implements ActionListener{
 		contentPane.add(btnQuitter);
 		
 	}
-
+	
+	/*
+	 * 
+	 * 			EVENEMENTS BOUTONS
+	 * 	
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e){
 		
+		/*
+		 *	Bouton Quitter 
+		 */
 		if(e.getSource()==btnQuitter)
 		{	
 			System.exit(0);
 			
 		}
-		
+		/*
+		 * 	Bouton Option
+		 */
 		if(e.getSource()==btnOption)
 		{
 			Option frame = new Option();
 			frame.setVisible(true); 
 		}
+		/*
+		 * Bouton Editeur
+		 */
 		if(e.getSource()==btnEditeur)
 		{
 			EditeurMap.StartEdideurMap();
 			this.dispose();
 			
 		}
+		/*
+		 *  Bouton jouer / rejoindre Une partie
+		 */
 		if(e.getSource()== btnJouer){
 			RejoindreUnePartie rUP = new RejoindreUnePartie(this);
 			rUP.setVisible(true);
