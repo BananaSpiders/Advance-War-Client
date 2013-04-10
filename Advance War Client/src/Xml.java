@@ -37,30 +37,220 @@ import org.jdom2.output.*;
  * 	
  * USE :
  * */
-  	//////////////////////////////////////////////////////////////////########
- 	//																//
- 	//								USE 							//
- 	//																//
- 	//////////////////////////////////////////////////////////////////########
-
-	//########################################################################
- /*
-  * 
-  */
-public class Xml
-{
 //////////////////////////////////////////////////////////////////########
 //																//
 //								USE 							//
 //																//
 //////////////////////////////////////////////////////////////////########
+
+//########################################################################
+/*
+ * 
+ */
+public class Xml
+{
+	//////////////////////////////////////////////////////////////////########
+	//																//
+	//								USE 							//
+	//																//
+	//////////////////////////////////////////////////////////////////########
+	
+	/*
+	 * 
+	 * 					ATTRIBUTS
+	 * 
+	 */
 	//Nous allons commencer notre arborescence en cr�ant la racine XML
 	//qui sera ici "personnes".
 	static Element racine = new Element("map");
 
 	//On cr�e un nouveau Document JDOM bas� sur la racine que l'on vient de cr�er
 	static org.jdom2.Document document = new Document(racine);
-//########################################################################
+	
+	
+
+	/*
+	 * 
+	 *  				CONSTRUCTEUR
+	 * 
+	 */
+	public Xml(String nameFileXmlToRegister, Case[][] tabCaseMap)
+	{
+		//On cr�e un nouvel Element nom, on lui assigne du texte
+		//et on l'ajoute en tant qu'Element de etudiant
+		for(int yi=0; yi<tabCaseMap.length;yi++){
+			Element y = new Element("y");
+			//On cr�e un nouvel Attribut id et on l'ajoute � y
+			//gr�ce � la m�thode setAttribute
+			Attribute classe = new Attribute("id",yi+"");
+			y.setAttribute(classe);
+
+			for(int xi = 0; xi<tabCaseMap[0].length; xi++){
+				Element nom = new Element("x"+xi);
+
+				Element posX = new Element("case_x");
+				posX.setText(tabCaseMap[yi][xi].getX()+"");
+				Element posY = new Element("case_y");
+				posY.setText(tabCaseMap[yi][xi].getY()+"");
+				Element typeCase = new Element("case_type");
+				typeCase.setText(tabCaseMap[yi][xi].getTypeCase()+"");
+				Element appartient = new Element("appartient");
+				appartient.setText(tabCaseMap[yi][xi].getAppartient()+"");
+				nom.addContent(posX);
+				nom.addContent(posY);
+				nom.addContent(typeCase);
+				nom.addContent(appartient);
+
+				y.addContent(nom);
+			}
+			racine.addContent(y);
+		}
+		enregistre(nameFileXmlToRegister+"");
+	}
+	
+	
+	
+	
+	
+	
+
+	/*
+	 * 
+	 *  			LIRE FICHIER XML return tab2D de Case
+	 * 
+	 * 
+	 */
+	static Case[][] Deserialiser(String fichier) 
+	{
+		//On cr�e une instance de SAXBuilder
+		SAXBuilder sxb = new SAXBuilder();
+		// on initialise
+		Document document = null;
+		Element racine = null;
+		Case[][] tabMap;
+		System.out.println("map/"+fichier+".xml");
+		System.out.println(fichier);
+		try
+		{
+			//On cr�e un nouveau document JDOM avec en argument le fichier XML
+			document = sxb.build(new File("map/"+fichier+".xml"));
+		}
+		catch(Exception e){}
+		System.out.println("map/"+fichier+".xml");
+		//On initialise un nouvel �l�ment racine avec l'�l�ment racine du document.
+		if(document != null)
+			racine = document.getRootElement();
+		else
+			System.out.println("Error lors de l'ouverture du fichier XML document => null");
+
+		//On cr�e une List contenant tous les noeuds "y" de l'Element racine
+		List listY = racine.getChildren("y");
+
+		// Connaitre le nombre de Y
+		List listCompteur = listY;
+		Iterator iCompteur = listY.iterator();
+		int compteurY=0;
+		int xi=0;
+		while(iCompteur.hasNext())
+		{
+			Element courant = (Element)iCompteur.next();
+			xi=0;
+			while(courant.getChild("x"+xi) != null){
+				xi++;
+			}
+			compteurY++;
+		}
+
+		// On initialise le tableau avec le nombre d�l�ments qu'on a trouv�
+		tabMap = new Case[compteurY][xi];
+		//On cr�e un Iterator sur notre liste
+		Iterator i = listY.iterator();
+		compteurY=0;
+
+		// Pour chaque Y(ligne)
+		//( y1_X1|y1_X2|y1_X3|...
+		//  y2_X1|y2_X2|y2_X3|...
+		//  y3_X1|y3_X2|y3_X3|...)
+		while(i.hasNext())
+		{
+			//On recr�e l'Element courant � chaque tour de boucle afin de
+			//pouvoir utiliser les m�thodes propres aux Element comme :
+			//s�lectionner un n�ud fils, modifier du texte, etc...
+			Element courant = (Element)i.next();
+
+
+			//Pour chaque X ( x1 |x2 |x3 |x4 |x5 |x6 )
+			xi=0;
+			while(courant.getChild("x"+xi) != null){
+				tabMap[compteurY][xi] = new Case();
+				//On affiche le nom de l��l�ment courant
+				//System.out.println(courant.getChild("x"+xi).getText());
+
+				// on rempli la bonne case du tableau en essayant de parser en int cet element 
+				//du fichier XML si le parse rate on met le case du tableau a 0
+				try{
+					tabMap[compteurY][xi].setX(Integer.parseInt(courant.getChild("x"+xi).getChild("case_x").getText()));
+					tabMap[compteurY][xi].setY(Integer.parseInt(courant.getChild("x"+xi).getChild("case_y").getText()));
+					String sTypeCase = courant.getChild("x"+xi).getChild("case_type").getText().toUpperCase();
+					tabMap[compteurY][xi].setTypeCase(TypeCase.valueOf(sTypeCase)  );
+					tabMap[compteurY][xi].setAppartient(Integer.parseInt(courant.getChild("x"+xi).getChild("appartient").getText()));
+				}
+				catch(Exception e){
+					System.out.println("Exception :"+e+" (la case a etait mise a 0 par defaut).");
+					tabMap[compteurY][xi].setX(0);
+					tabMap[compteurY][xi].setY(0);
+					tabMap[compteurY][xi].setTypeCase(TypeCase.HERBE);
+					tabMap[compteurY][xi].setAppartient(0);
+				}
+				xi++;
+			}
+			compteurY++;
+
+		}
+		return tabMap;
+	}
+	//########################################################################
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/////#######################################################################################################
+	/////#######################################################################################################
+	/////#######################################################################################################
+	/////#######################################################################################################
+	/////#######################################################################################################
+	/////#######################################################################################################
+	/////#################################							############################################
+	/////#################################		Code MORT			############################################
+	/////#################################							############################################
+	/////#################################							############################################
+	/////#######################################################################################################
+	/////#######################################################################################################
+	/////#######################################################################################################
+	/////#######################################################################################################
+	/////#######################################################################################################
+	/////#######################################################################################################
+	/////#######################################################################################################
+	/////#######################################################################################################
+	/////#######################################################################################################
+
 	//////////////////////////////////////////////////////////////////
 	/// CONSTRUCTEURS
 	////////////////////////////////////////////////////////////////////
@@ -134,48 +324,7 @@ public class Xml
 		}
 		enregistre(nameFileXmlToRegister+"");
 	}
-  	//////////////////////////////////////////////////////////////////########
- 	//																//
- 	//								USE 							//
- 	//																//
- 	//////////////////////////////////////////////////////////////////########
-	//////////////////////////////////////////////////////////////////
-	// CONSTRUCT AVEC CASE
-	//////////////////////////////////////////////////////////////////
-	public Xml(String nameFileXmlToRegister, Case[][] tabCaseMap)
-	{
-		//On cr�e un nouvel Element nom, on lui assigne du texte
-		//et on l'ajoute en tant qu'Element de etudiant
-		for(int yi=0; yi<tabCaseMap.length;yi++){
-			Element y = new Element("y");
-			//On cr�e un nouvel Attribut id et on l'ajoute � y
-			//gr�ce � la m�thode setAttribute
-			Attribute classe = new Attribute("id",yi+"");
-			y.setAttribute(classe);
-			
-			for(int xi = 0; xi<tabCaseMap[0].length; xi++){
-				Element nom = new Element("x"+xi);
 
-				Element posX = new Element("case_x");
-				posX.setText(tabCaseMap[yi][xi].getX()+"");
-				Element posY = new Element("case_y");
-				posY.setText(tabCaseMap[yi][xi].getY()+"");
-				Element typeCase = new Element("case_type");
-				typeCase.setText(tabCaseMap[yi][xi].getTypeCase()+"");
-				Element appartient = new Element("appartient");
-				appartient.setText(tabCaseMap[yi][xi].getAppartient()+"");
-				nom.addContent(posX);
-				nom.addContent(posY);
-				nom.addContent(typeCase);
-				nom.addContent(appartient);
-				
-				y.addContent(nom);
-			}
-			racine.addContent(y);
-		}
-		enregistre(nameFileXmlToRegister+"");
-	}
-	//########################################################################
 	/////////////////////////////////////////////////////////////////////////////////////////////
 	// ENREGISTRER FICHIER XML
 	////////////////////////////////////////////////////////////////////////////////////////////
@@ -248,7 +397,7 @@ public class Xml
 			//pouvoir utiliser les m�thodes propres aux Element comme :
 			//s�lectionner un n�ud fils, modifier du texte, etc...
 			Element courant = (Element)i.next();
-			
+
 			//System.out.println("Size "+compteurY+":"+listY.size());
 
 			//Pour chaque X ( x1 |x2 |x3 |x4 |x5 |x6 )
@@ -272,104 +421,7 @@ public class Xml
 		}
 		return tabMap;
 	}
-  	//////////////////////////////////////////////////////////////////########
- 	//																//
- 	//								USE 							//
- 	//																//
- 	//////////////////////////////////////////////////////////////////########
-/////////////////////////////////////////////////////////////////////////////////////////////
-// LIRE FICHIER XML return tab2D de Case
-////////////////////////////////////////////////////////////////////////////////////////////
-	static Case[][] Deserialiser(String fichier) 
-	{
-		//On cr�e une instance de SAXBuilder
-		SAXBuilder sxb = new SAXBuilder();
-		// on initialise
-		Document document = null;
-		Element racine = null;
-		Case[][] tabMap;
-		System.out.println("map/"+fichier+".xml");
-		System.out.println(fichier);
-		try
-		{
-			//On cr�e un nouveau document JDOM avec en argument le fichier XML
-			document = sxb.build(new File("map/"+fichier+".xml"));
-		}
-		catch(Exception e){}
-		System.out.println("map/"+fichier+".xml");
-		//On initialise un nouvel �l�ment racine avec l'�l�ment racine du document.
-		if(document != null)
-			racine = document.getRootElement();
-		else
-			System.out.println("Error lors de l'ouverture du fichier XML document => null");
 
-		//On cr�e une List contenant tous les noeuds "y" de l'Element racine
-		List listY = racine.getChildren("y");
-
-		// Connaitre le nombre de Y
-		List listCompteur = listY;
-		Iterator iCompteur = listY.iterator();
-		int compteurY=0;
-		int xi=0;
-		while(iCompteur.hasNext())
-		{
-			Element courant = (Element)iCompteur.next();
-			 xi=0;
-			while(courant.getChild("x"+xi) != null){
-				xi++;
-			}
-			compteurY++;
-		}
-
-		// On initialise le tableau avec le nombre d�l�ments qu'on a trouv�
-		tabMap = new Case[compteurY][xi];
-		//On cr�e un Iterator sur notre liste
-		Iterator i = listY.iterator();
-		compteurY=0;
-
-		// Pour chaque Y(ligne)
-		//( y1_X1|y1_X2|y1_X3|...
-		//  y2_X1|y2_X2|y2_X3|...
-		//  y3_X1|y3_X2|y3_X3|...)
-		while(i.hasNext())
-		{
-			//On recr�e l'Element courant � chaque tour de boucle afin de
-			//pouvoir utiliser les m�thodes propres aux Element comme :
-			//s�lectionner un n�ud fils, modifier du texte, etc...
-			Element courant = (Element)i.next();
-			
-
-			//Pour chaque X ( x1 |x2 |x3 |x4 |x5 |x6 )
-			xi=0;
-			while(courant.getChild("x"+xi) != null){
-				tabMap[compteurY][xi] = new Case();
-				//On affiche le nom de l��l�ment courant
-				//System.out.println(courant.getChild("x"+xi).getText());
-
-				// on rempli la bonne case du tableau en essayant de parser en int cet element 
-				//du fichier XML si le parse rate on met le case du tableau a 0
-				try{
-					tabMap[compteurY][xi].setX(Integer.parseInt(courant.getChild("x"+xi).getChild("case_x").getText()));
-					tabMap[compteurY][xi].setY(Integer.parseInt(courant.getChild("x"+xi).getChild("case_y").getText()));
-					String sTypeCase = courant.getChild("x"+xi).getChild("case_type").getText().toUpperCase();
-					tabMap[compteurY][xi].setTypeCase(TypeCase.valueOf(sTypeCase)  );
-					tabMap[compteurY][xi].setAppartient(Integer.parseInt(courant.getChild("x"+xi).getChild("appartient").getText()));
-				}
-				catch(Exception e){
-					System.out.println("Exception :"+e+" (la case a etait mise a 0 par defaut).");
-					tabMap[compteurY][xi].setX(0);
-					tabMap[compteurY][xi].setY(0);
-					tabMap[compteurY][xi].setTypeCase(TypeCase.HERBE);
-					tabMap[compteurY][xi].setAppartient(0);
-				}
-				xi++;
-			}
-			compteurY++;
-
-		}
-		return tabMap;
-	}
-	//########################################################################
 	/////////////////////////////////////////////////////////////////////////////////////////////
 	//AFFICHE FICHIER XML
 	////////////////////////////////////////////////////////////////////////////////////////////
