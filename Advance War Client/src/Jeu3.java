@@ -340,7 +340,10 @@ public class Jeu3 extends JFrame implements MouseMotionListener, MouseListener,K
 						deplacementOkay=false;
 						JOptionPane.showMessageDialog(null, "Deplacement impossible de tank dans l'eau.");
 					}
-						
+					
+					
+					
+					
 					if(distance<=uniteEnDeplacement.getDeplacementRestant() && deplacementOkay==true)
 					{
 						String pos;
@@ -552,7 +555,7 @@ public class Jeu3 extends JFrame implements MouseMotionListener, MouseListener,K
 		}
 	}
 	
-	public int calculeDistance(int x,int y){
+	public int calculeDistance(int x,int y){ // x et y en case pas en pixel
 		int uniteX = uniteEnDeplacement.getPosX()/Constantes.TAILLE_CASE;
 		int uniteY = uniteEnDeplacement.getPosY()/Constantes.TAILLE_CASE;
 		
@@ -665,6 +668,10 @@ public class Jeu3 extends JFrame implements MouseMotionListener, MouseListener,K
 			
 	}
 	
+						
+						////////////////////////////
+						//	Gestion des Captures
+						///////////////////////////												
 	public void gestionCapture(int x,int y){
 		
 		
@@ -940,7 +947,7 @@ public class Jeu3 extends JFrame implements MouseMotionListener, MouseListener,K
 		// si case contient une unitee adverse on l'affecte a uniteCaseSelect
 		Unite uniteCaseSelect = contientUneUniteAdverse(this.cursor.getPosX()/30,(this.cursor.getPosY()-Constantes.HAUTEUR_BARRE)/30 );
 		// si uniteCaseSelect na rien recu => null on regarde si cest pas une de nos unitée 
-		if(uniteCaseSelect == null ){//zzzzzz
+		if(uniteCaseSelect == null ){
 			uniteCaseSelect = contientUneDeMesUnite(this.lesJoueurs.get(numeroJoueurLocal-1), this.cursor.getPosX()/30,(this.cursor.getPosY()-Constantes.HAUTEUR_BARRE)/30);
 		}
 		
@@ -1035,16 +1042,32 @@ public class Jeu3 extends JFrame implements MouseMotionListener, MouseListener,K
 	}
 	/////////////////////////////////////////////////////////////////
 	
+	/////////////////////////
+	//	Methode affiche les carre deplacable
+	///////////////////////
+	public void affichePointsDeplacements(){
+		
+		for(int i=0; i< this.plateau.length ; i++)
+			for(int j=0 ; j<this.plateau[0].length ; j++){
+				int distance = this.calculeDistance(i,j);
+				if(distance<=this.uniteEnDeplacement.getDeplacementRestant() ){
+					buffer.drawImage(new ImageIcon(this.getClass().getResource("deplacementRestant.gif")).getImage(),i*Constantes.TAILLE_CASE, j*Constantes.TAILLE_CASE  +Constantes.HAUTEUR_BARRE,this);
+				}
+			}
+	}
+	
 	public void afficherCercle(int mode) {
 		//1: deplacement 2: attaque
 		
 		if(mode==1)
 		{
+			affichePointsDeplacements();
 			buffer.setColor(Color.BLACK);
-			buffer.drawOval(uniteEnDeplacement.getPosX()-(uniteEnDeplacement.getDeplacementRestant()* Constantes.TAILLE_CASE), 
+			/*buffer.drawOval(uniteEnDeplacement.getPosX()-(uniteEnDeplacement.getDeplacementRestant()* Constantes.TAILLE_CASE), 
 							uniteEnDeplacement.getPosY()-(uniteEnDeplacement.getDeplacementRestant()* Constantes.TAILLE_CASE)+Constantes.TAILLE_CASE,
 					2 * (uniteEnDeplacement.getDeplacementRestant() * Constantes.TAILLE_CASE) + Constantes.TAILLE_CASE,
 					2 * (uniteEnDeplacement.getDeplacementRestant() * Constantes.TAILLE_CASE) + Constantes.TAILLE_CASE);
+		*/
 		}
 		
 		if(mode==2)
