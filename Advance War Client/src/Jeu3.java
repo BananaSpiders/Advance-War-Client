@@ -335,12 +335,8 @@ public class Jeu3 extends JFrame implements MouseMotionListener, MouseListener,K
 					int posXU = sourisX; // en case
 					int posYU = sourisY; // en case
 					
-					// si tank => eau
-					if(this.plateau[posXU][posYU].getTypeCase() == TypeCase.EAU &&  (uniteEnDeplacement instanceof Tank) ){
-						deplacementOkay=false;
-						JOptionPane.showMessageDialog(null, "Deplacement impossible de tank dans l'eau.");
-					}
-					
+					// on test si l'unite peu y aller
+					deplacementOkay = isUniteAllerIci(posXU, posYU, uniteEnDeplacement,true);
 					
 					
 					
@@ -481,6 +477,29 @@ public class Jeu3 extends JFrame implements MouseMotionListener, MouseListener,K
 				return u;
 		}
 		return null;
+	}
+	
+	////////////////////////////////////////////////////
+	//	Test si cette unite peu aller a cette case
+	/////////////////////////////////////////////////
+	public boolean isUniteAllerIci(int caseX, int caseY, Unite u, boolean ShowError){
+		
+		// tank => eau
+		if(this.plateau[caseX][caseY].getTypeCase() == TypeCase.EAU &&  ( (u instanceof Tank) || (u instanceof Jeep) || (u instanceof Artillerie) )){
+			if(ShowError)
+				JOptionPane.showMessageDialog(null, "Deplacement impossible dans l'eau.");
+			return false;
+		}
+		// tank => montagne
+		if(this.plateau[caseX][caseY].getTypeCase() == TypeCase.SAPIN1 &&  (u instanceof Tank) ){
+			if(ShowError)
+				JOptionPane.showMessageDialog(null, "Deplacement impossible dans les montagnes.");
+			return false;
+		}
+		
+		
+		// si tout est ok on retourne vrai
+		return true;
 	}
 	
 	public Unite contientUneUniteAdverse( int caseX, int caseY) {
@@ -1043,15 +1062,30 @@ public class Jeu3 extends JFrame implements MouseMotionListener, MouseListener,K
 	/////////////////////////////////////////////////////////////////
 	
 	/////////////////////////
-	//	Methode affiche les carre deplacable
+	//	Methode affiche les carre deplacement
 	///////////////////////
 	public void affichePointsDeplacements(){
 		
+		////////////////////////////////////
+		//	Carrer deplacement voulu
+		////////////////////////////////////
+		/*
+		this.cursor.getPosX();
+		this.cursor.getPosY();*///zzzz
+		
+		////////////////////////////////////
+		// Carrer portee de deplacement
+		////////////////////////////////////
 		for(int i=0; i< this.plateau.length ; i++)
 			for(int j=0 ; j<this.plateau[0].length ; j++){
 				int distance = this.calculeDistance(i,j);
-				if(distance<=this.uniteEnDeplacement.getDeplacementRestant() ){
-					buffer.drawImage(new ImageIcon(this.getClass().getResource("deplacementRestant.gif")).getImage(),i*Constantes.TAILLE_CASE, j*Constantes.TAILLE_CASE  +Constantes.HAUTEUR_BARRE,this);
+				if(distance<=this.uniteEnDeplacement.getDeplacementRestant() && (this.uniteEnDeplacement.getPosX()/30 != i || this.uniteEnDeplacement.getPosY()/30 != j)){
+					
+					// si lemplacement est accessible on laffiche en vert sinon en rouge
+					if(isUniteAllerIci(i, j, this.uniteEnDeplacement,false))
+						buffer.drawImage(new ImageIcon(this.getClass().getResource("deplacementRestant.gif")).getImage(),i*Constantes.TAILLE_CASE, j*Constantes.TAILLE_CASE  +Constantes.HAUTEUR_BARRE,this);
+					else
+						buffer.drawImage(new ImageIcon(this.getClass().getResource("deplacementRestantR.gif")).getImage(),i*Constantes.TAILLE_CASE, j*Constantes.TAILLE_CASE  +Constantes.HAUTEUR_BARRE,this);
 				}
 			}
 	}
