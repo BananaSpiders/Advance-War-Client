@@ -8,7 +8,7 @@ public class Joueur {
 	private int nombreVilles;
 	private int nombreQG;
 	
-
+	public boolean isDie;
 	private int nombreBases;
 	
 	private int argent;
@@ -29,6 +29,7 @@ public class Joueur {
 		this.nombreQG = 1;
 		this.argent = 2000;
 		this.listeUnites = new ArrayList<Unite>();
+		this.isDie=false;
 	}
 	
 	Joueur(String pseudo,int numero){
@@ -41,6 +42,7 @@ public class Joueur {
 		this.nombreQG = 1;
 		this.argent = 2000;
 		this.listeUnites = new ArrayList<Unite>();
+		this.isDie=false;
 	}
 	
 	public String getPseudo() {

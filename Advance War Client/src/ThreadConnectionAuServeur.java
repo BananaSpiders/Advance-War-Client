@@ -24,7 +24,6 @@ public class ThreadConnectionAuServeur extends Thread {
 	private int numClient; // 0.1.2.3
 	private ConnectionAuServeur owner;
 
-
 	///////////////////////////////////////
 	// 		CONSTRUCTEUR
 	///////////////////////////////////////
@@ -206,6 +205,10 @@ public class ThreadConnectionAuServeur extends Thread {
 					}
 
 				}
+				
+				/////////////////////////////////////////////////////////////
+				//		Gestions reception des captures
+				///////////////////////////////////////////////////////////
 				else if(commande.equals("CAP")){ // si une baseville/qg est captuee ( ex : (CAP2x10y09V) )
 					int numeroDeJoueur = Integer.parseInt(str.substring(3,4)); // 0.1.2.3
 					int posX = Integer.parseInt(str.substring(5,7));
@@ -213,14 +216,58 @@ public class ThreadConnectionAuServeur extends Thread {
 					String typeBat = str.substring(10,11);
 					
 					System.out.println("Commande : "+commande+" num joueur : "+numeroDeJoueur+" posX : "+posX+"posY : "+posY+" type : "+typeBat);
+					
+					
+					/// on regarde si nous sommes le joueur concerné
+					boolean itsMe=false;
+					Joueur joueurLocal = null;
+					if(this.owner.notreJeu.plateau[posX][posY].getAppartient() == this.owner.notreJeu.getNumeroJoueurLocal()){
+						itsMe=true;
+						// on recupere la reference de notre joueure
+						joueurLocal = this.owner.notreJeu.getOneJoueur(this.owner.notreJeu.getNumeroJoueurLocal()-1);
+					}
+					
 					// on modifi les variables en fonction de se que lon a recu
 					this.owner.notreJeu.plateau[posX][posY].setAppartient(numeroDeJoueur+1);
-					if(typeBat.equals("V"))
+					/// si VILLE
+					if(typeBat.equals("V")){
 						this.owner.notreJeu.plateau[posX][posY].setImageIcon(new ImageIcon(this.getClass().getResource((numeroDeJoueur+1)+"_bat_ville.jpg")));
-					else if(typeBat.equals("B"))
+						// Si cest nous qui avons perdu une ville
+						if(itsMe){
+							joueurLocal.setNombreVilles(joueurLocal.getNombreVilles()-1);
+						}
+					}
+					
+					// SI BASE
+					else if(typeBat.equals("B")){
 						this.owner.notreJeu.plateau[posX][posY].setImageIcon(new ImageIcon(this.getClass().getResource((numeroDeJoueur+1)+"_bat_base.jpg")));
-					else if(typeBat.equals("Q"))
+						// Si cest nous qui avons perdu une base
+						if(itsMe){
+							joueurLocal.setNombreBases(joueurLocal.getNombreBases()-1);
+						}
+					}
+					
+					// SI QG
+					else if(typeBat.equals("Q")){
 						this.owner.notreJeu.plateau[posX][posY].setImageIcon(new ImageIcon(this.getClass().getResource((numeroDeJoueur+1)+"_bat_qg.jpg")));
+						// Si cest nous qui avons perdu un	qg
+						if(itsMe){
+							joueurLocal.setNombreQG(joueurLocal.getNombreQG()-1);
+							if(joueurLocal.getNombreQG() < 1){
+								this.owner.notreJeu.joueurLocalPerdu = true;
+							}
+						}
+						
+						
+					}
+				}
+				// SI ON RECOI QUUN JOUEUR EST MORT
+				else if(commande.equals("DIE")){
+					int numeroDeJoueur = Integer.parseInt(str.substring(3,4)); // 0.1.2.3
+					
+					this.owner.notreJeu.getOneJoueur(numeroDeJoueur).isDie=true;// on die que le joueur est mort
+					
+					
 				}
 				else if(commande.equals("MSG")){
 					this.owner.notreJeu.afficherPopup(str.substring(3,str.length()));

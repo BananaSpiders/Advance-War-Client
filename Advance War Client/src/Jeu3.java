@@ -40,6 +40,8 @@ public class Jeu3 extends JFrame implements MouseMotionListener, MouseListener,K
 	// Joueurs
 	private int numeroJoueurLocal;
 	private ArrayList<Joueur> lesJoueurs;
+	public boolean joueurLocalPerdu;
+	public boolean isModeObservateur;
 
 	// Declaration des éléments nécessaires au rendu graphique et double
 	// buffering
@@ -70,6 +72,9 @@ public class Jeu3 extends JFrame implements MouseMotionListener, MouseListener,K
 	public Jeu3(String carte,ConnectionAuServeur connexionServeur,int numeroJoueur) {
 		// Declaration du curseur
 		this.cursor = new Cursor();
+		
+		this.joueurLocalPerdu=false;
+		this.isModeObservateur = false;
 		
 		// Déclaration des differentes variables et listes nécessaires
 		this.caseSelectionnee = TypeCase.HERBE;
@@ -140,7 +145,9 @@ public class Jeu3 extends JFrame implements MouseMotionListener, MouseListener,K
 			afficheBoutonAcheter(); // Affichage du bouton acheter seulement si l'on clique sur notre base
 		if(!this.monTour)
 			afficheAttente(); // Affiche l'image Wit your turn seulement si ce n'est pas notre tour
-
+		if(this.joueurLocalPerdu == true){ // Affiche perdu retour au menu possible
+			affichePerdu();
+		}
 		// On envoi toutes les données du buffer vers mémoire vers le buffer
 		// d'affichage
 		strategy.show();
@@ -608,7 +615,22 @@ public class Jeu3 extends JFrame implements MouseMotionListener, MouseListener,K
 		}
 		if(e.getKeyCode()==KeyEvent.VK_ESCAPE)
 		{
-			//PASSER TOUR
+			///////////////////////////
+			//	Si victoire
+			/////////////////////
+			// Si joueurLocal est le dernier survivant
+			int nbJoueurRestant = this.totalJoueurs;
+			for(Joueur j : this.lesJoueurs){
+				if(j.getID() != this.numeroJoueurLocal-1 && j.isDie==true)
+					nbJoueurRestant--;
+			}
+			if(nbJoueurRestant <2){
+				Victoire v = new Victoire(this);
+				v.setVisible(true);
+			}
+			////////////////////////////////////////
+			//	PASSER TOUR
+			//////////////////////////////////
 			this.monTour = false;
 			this.nbAttaquesRestantes = 2;
 			for(Unite u : this.owner.notreJeu.lesJoueurs.get(numeroJoueurLocal-1).getListeUnites())
@@ -616,7 +638,7 @@ public class Jeu3 extends JFrame implements MouseMotionListener, MouseListener,K
 				u.setDeplacementRestant(u.getPtsMvt());	//on reinitilise les points de mouvement
 				u.bMunition = true;	//on reinitilise les munitions
 			}
-			// on donne 200$ par ville capture
+			// on donne environ 200$ par ville capture
 			int salaire = 0;
 			
 			for(int x=0; x<this.plateau.length; x++) // on parcourt toutes les cases du tableau
@@ -756,6 +778,10 @@ public class Jeu3 extends JFrame implements MouseMotionListener, MouseListener,K
 				pos += "y"+(y);
 
 			this.owner.threadCo.getSocketOut().println("CAP"+(numeroJoueurLocal-1)+pos+"Q"); // ex : (CAP2x10y09V)
+			
+			
+				
+			
 		}
 		
 		
@@ -1015,6 +1041,27 @@ public class Jeu3 extends JFrame implements MouseMotionListener, MouseListener,K
 	}
 	///////////////////////////////////////////////////////////////////////////////
 	
+	///////////////// AFFICHAGE DE PERDU \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+	public void affichePerdu(){
+		
+		if(this.isModeObservateur==false){
+			JoueurLocalPerdu jLPerdu = new JoueurLocalPerdu(this);
+			jLPerdu.setVisible(true);
+			this.isModeObservateur=true;
+			
+			this.owner.threadCo.getSocketOut().println("DIE"+(numeroJoueurLocal-1)); // ex : (DIE3)
+		}
+		this.monTour = false;
+		
+		int i;
+		if(this.numeroJoueurLocal < this.totalJoueurs)
+			i = this.numeroJoueurLocal+1;
+		else
+			i = 1;		
+		this.owner.threadCo.getSocketOut().println("FIN"+i);
+	}
+	//////////////////////////////////////////////////////////////////////
+	
 	///////////////////////// AFFICHAGE DES UNITES \\\\\\\\\\\\\\\\\\\\
 	public void afficheUnites() {
 		for (Joueur j : this.lesJoueurs) {
@@ -1264,7 +1311,9 @@ public class Jeu3 extends JFrame implements MouseMotionListener, MouseListener,K
 	public void setUniteAttaquee(Unite uniteAttaquee) {
 		this.uniteAttaquee = uniteAttaquee;
 	}
-	
+	public Joueur getOneJoueur(int idJoueur){// id => 0/1/2/3
+		return this.lesJoueurs.get(idJoueur);
+	}
 	
 								///////////////////////////////////////////////
 								////            DEBUG METHODS               //
