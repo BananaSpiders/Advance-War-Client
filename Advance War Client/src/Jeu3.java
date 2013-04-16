@@ -31,7 +31,7 @@ public class Jeu3 extends JFrame implements MouseMotionListener, MouseListener,K
 	private boolean partieLancee;
 	private int totalJoueurs;
 	
-	// Declaration des éléments de jeu
+	// Declaration des ï¿½lï¿½ments de jeu
 	// plateau + curseur
 	public Case[][] plateau;// Tableau de Cases -> Plateau de jeu
 	private Cursor cursor;// Curseur qui permet de pointer le curseur,tester les
@@ -390,10 +390,6 @@ public class Jeu3 extends JFrame implements MouseMotionListener, MouseListener,K
 				
 				// Connaitre l'unite qui vient d'attaquer
 				Unite monUnite = contientUneDeMesUnite(this.owner.notreJeu.getLesJoueurs().get(numeroJoueurLocal-1), uniteEnDeplacement.getPosX()/Constantes.TAILLE_CASE, uniteEnDeplacement.getPosY()/Constantes.TAILLE_CASE);
-				
-				// Si cette unite na plus de munition
-				if(monUnite.bMunition == false)
-					JOptionPane.showMessageDialog(null, "Cette unitee n'a plus de munition.");
 					
 				// si il y a bien un adversert et quil me reste des munitions pour cette unite
 				if(uniteAttaquee != null && monUnite.bMunition == true)
@@ -607,14 +603,21 @@ public class Jeu3 extends JFrame implements MouseMotionListener, MouseListener,K
 			return;
 		if(modeDeplacement)
 		{
-			if(e.getKeyCode()==KeyEvent.VK_A)
+			if(e.getKeyCode()==KeyEvent.VK_A && uniteEnDeplacement.bMunition)
 			{
 				MenuAction m = new MenuAction(this);
 				m.setVisible(true);
-			}			
+			}
+			else if(!uniteEnDeplacement.bMunition)
+			{
+				JOptionPane.showMessageDialog(this, "Cette unitÃ© n'a plus de munitions !");
+			}
 		}
 		if(e.getKeyCode()==KeyEvent.VK_ESCAPE)
 		{
+			//On arrete le mode de dÃ©placement pour eviter les pbs de dÃ©placement au prochain tour
+			this.modeDeplacement=false;
+			this.uniteEnDeplacement=null;
 			///////////////////////////
 			//	Si victoire
 			/////////////////////
@@ -991,7 +994,7 @@ public class Jeu3 extends JFrame implements MouseMotionListener, MouseListener,K
 		
 		// si case contient une unitee adverse on l'affecte a uniteCaseSelect
 		Unite uniteCaseSelect = contientUneUniteAdverse(this.cursor.getPosX()/30,(this.cursor.getPosY()-Constantes.HAUTEUR_BARRE)/30 );
-		// si uniteCaseSelect na rien recu => null on regarde si cest pas une de nos unitée 
+		// si uniteCaseSelect na rien recu => null on regarde si cest pas une de nos unitï¿½e 
 		if(uniteCaseSelect == null ){
 			uniteCaseSelect = contientUneDeMesUnite(this.lesJoueurs.get(numeroJoueurLocal-1), this.cursor.getPosX()/30,(this.cursor.getPosY()-Constantes.HAUTEUR_BARRE)/30);
 		}
@@ -1321,7 +1324,7 @@ public class Jeu3 extends JFrame implements MouseMotionListener, MouseListener,K
 	// AFFICHE LA LISTE D'UNITE DU JOUEUR SPECIFIE EN PARAMETRE  : numero dans 1,2,3,4
 	public void afficheUnites(int num){
 		for(Unite u:this.lesJoueurs.get(num-1).getListeUnites()){
-			System.out.println("\nUnité "+u.getClass().getName()+"\nPosX(case/pixels) : "+u.getPosX()/30+"/"+u.getPosX()
+			System.out.println("\nUnitï¿½ "+u.getClass().getName()+"\nPosX(case/pixels) : "+u.getPosX()/30+"/"+u.getPosX()
 					+"\n"+u.getPosY()/30+"/"+u.getPosY()+"\nNbVies : "+u.getPv()+"\nNbDeplacementMax : "+u.getPtsMvt()+"\nNbDeplacementMax : "+u.getDeplacementRestant());
 		}
 	}
