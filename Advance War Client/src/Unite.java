@@ -12,6 +12,16 @@ public abstract class Unite{
 	protected boolean accidente;
 	public boolean bMunition;
 	
+	protected boolean bombe;
+	
+	public boolean isBombe() {
+		return bombe;
+	}
+
+	public void setBombe(boolean bombe) {
+		this.bombe = bombe;
+	}
+
 	public Unite(int posX,int posY){
 		this.posX = posX;
 		this.posY = posY;

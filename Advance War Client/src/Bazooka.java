@@ -7,5 +7,6 @@ public class Bazooka extends Infanterie {
 		this.deplacementRestant = 2;
 		this.portee=2;
 		this.att=7;
+		this.bombe=false;
 	}
 }

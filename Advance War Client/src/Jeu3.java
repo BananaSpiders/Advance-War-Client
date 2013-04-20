@@ -27,7 +27,7 @@ public class Jeu3 extends JFrame implements MouseMotionListener, MouseListener,K
 
 	//Reseau
 	
-	private ConnectionAuServeur owner;
+	ConnectionAuServeur owner;
 	private boolean partieLancee;
 	private int totalJoueurs;
 	
@@ -57,6 +57,7 @@ public class Jeu3 extends JFrame implements MouseMotionListener, MouseListener,K
 	public Case baseCourante = null;
 	private boolean modeDeplacement = false;
 	private boolean attaque = false;
+	private boolean poseBombe = false;
 	public boolean monTour = false;
 	private int nbAttaquesRestantes;
 	private ImageCase imageCase;// pour charger les imagesCase (sapinn,etc..)
@@ -243,9 +244,12 @@ public class Jeu3 extends JFrame implements MouseMotionListener, MouseListener,K
 		int caseX = e.getX() / Constantes.TAILLE_CASE;
 		int caseY = (e.getY()-Constantes.HAUTEUR_BARRE) / Constantes.TAILLE_CASE;
 
+		/*
+		 *  Gere "case selectionnee"
+		 */
 		if ((caseX >= 0 && caseX < Constantes.LARGEUR_TABLEAU)
 				&& (caseY >= 0 && caseY < Constantes.HAUTEUR_TABLEAU)) {
-			caseCourante = this.plateau[caseX][caseY];
+			this.caseCourante = this.plateau[caseX][caseY];
 			
 			switch (this.plateau[caseX][caseY].getTypeCase()) {
 			case HERBE:
@@ -320,8 +324,9 @@ public class Jeu3 extends JFrame implements MouseMotionListener, MouseListener,K
 
 				break;
 			}
-			
-			
+			////////////////////////////
+			// ACTION DEPLACEMENT
+			////////////////////////////
 			if(modeDeplacement && !attaque) {
 				int sourisX = (e.getX())/(Constantes.TAILLE_CASE);
 				int sourisY = ((e.getY()-Constantes.HAUTEUR_BARRE))/(Constantes.TAILLE_CASE);
@@ -380,7 +385,9 @@ public class Jeu3 extends JFrame implements MouseMotionListener, MouseListener,K
 					modeDeplacement = false;
 				}
 			}
-			
+			////////////////////////////
+			// ACTION ATTAQUE
+			////////////////////////////
 			if(attaque) {
 				int sourisX = (e.getX())/(Constantes.TAILLE_CASE);
 				int sourisY = ((e.getY()-Constantes.HAUTEUR_BARRE))/(Constantes.TAILLE_CASE);
@@ -437,7 +444,13 @@ public class Jeu3 extends JFrame implements MouseMotionListener, MouseListener,K
 				
 				attaque = false;
 			}
-
+			////////////////////////////
+			// ACTION POSE BOMbe
+			////////////////////////////
+			if(poseBombe){
+				
+			}
+			
 			uniteEnDeplacement = contientUneDeMesUnite(this.lesJoueurs.get(numeroJoueurLocal-1), caseX, caseY);
 
 			if (uniteEnDeplacement == null) {
@@ -555,9 +568,9 @@ public class Jeu3 extends JFrame implements MouseMotionListener, MouseListener,K
 					now = System.currentTimeMillis(); // On récupère le temps au
 					// début de la boucle
 					if ((now - last) > (1000.0 / 60.0)) // Si le laps de temps
-					// écoulé durant la
+					// ecoule durant la
 					// boucle est plus grand
-					// que le temps esperé
+					// que le temps espere
 					// pour chaque boucle:
 					{
 						last = now;
@@ -569,7 +582,7 @@ public class Jeu3 extends JFrame implements MouseMotionListener, MouseListener,K
 					// attend
 					// le
 					// temps
-					// nécessaire
+					// necessaire
 
 				} catch (Exception e) {
 				}
@@ -610,12 +623,12 @@ public class Jeu3 extends JFrame implements MouseMotionListener, MouseListener,K
 			}
 			else if(!uniteEnDeplacement.bMunition)
 			{
-				JOptionPane.showMessageDialog(this, "Cette unité n'a plus de munitions !");
+				JOptionPane.showMessageDialog(this, "Cette unitee n'a plus de munitions !");
 			}
 		}
 		if(e.getKeyCode()==KeyEvent.VK_ESCAPE)
 		{
-			//On arrete le mode de déplacement pour eviter les pbs de déplacement au prochain tour
+			//On arrete le mode de deplacement pour eviter les pbs de deplacement au prochain tour
 			this.modeDeplacement=false;
 			this.uniteEnDeplacement=null;
 			///////////////////////////
@@ -640,12 +653,55 @@ public class Jeu3 extends JFrame implements MouseMotionListener, MouseListener,K
 			{
 				u.setDeplacementRestant(u.getPtsMvt());	//on reinitilise les points de mouvement
 				u.bMunition = true;	//on reinitilise les munitions
+				u.setBombe(true); // on reinisialise les bombes
 			}
-			// on donne environ 200$ par ville capture
+			
+			
+			
 			int salaire = 0;
 			
 			for(int x=0; x<this.plateau.length; x++) // on parcourt toutes les cases du tableau
 				for(int y=0; y<this.plateau[0].length; y++){
+					
+					
+					// on decremente le temps de ses bombes et on lenvoi aux autre
+					if(this.plateau[x][y].getBombe()!=null){
+						this.plateau[x][y].getBombe().setDureeRestante(this.plateau[x][y].getBombe().getDureeRestante()-1);
+						// si la bombe doit exploser
+						if(this.plateau[x][y].getBombe().getDureeRestante() == 0){
+							int newVie = 99;
+							// on regarde les degats effectuee
+							for(int i = 0; i<4;i++)
+								for (Unite u : this.owner.notreJeu.getLesJoueurs().get(i).getListeUnites()) {
+									if ((u.getPosX() == x*Constantes.TAILLE_CASE)//
+											&& (u.getPosY()  == y*Constantes.TAILLE_CASE))
+									{
+										newVie =u.pv-this.plateau[x][y].getBombe().getDegat()+u.def;
+										u.setPv(u.pv-this.plateau[x][y].getBombe().getDegat()+u.def);
+										if(u.getPv()<=0){
+											this.getLesJoueurs().get(i).getListeUnites().remove(u);
+											break;
+										}
+									}
+								}
+							String pos;
+							if(x < 10)
+								pos = "x0"+(x);
+							else
+								pos = "x"+(x);
+							if(y < 10)
+								pos += "y0"+(y);
+							else
+								pos += "y"+(y);
+							// on l'envoi aux autre
+							this.owner.threadCo.getSocketOut().println("BOM"+getNumeroJoueurLocal()+"DEL"+"MIN"+pos+newVie);// bom => bombe / min => mine / pos => x y
+							// on la supprime
+							this.plateau[x][y].setBombe(null);
+						}
+					}
+					
+					
+					// on donne environ 200$ par ville capture
 					if(this.plateau[x][y].getAppartient() == numeroJoueurLocal){
 						if(this.plateau[x][y].getTypeCase() == TypeCase.BAT_VILLE){ // si cest un batiment a lui et que cest une ville on add 200 a son salaire
 							salaire += (int)(Math.random() * (200-150)) + 150;;
@@ -833,6 +889,9 @@ public class Jeu3 extends JFrame implements MouseMotionListener, MouseListener,K
 		for (int i = 0; i < Constantes.LARGEUR_TABLEAU; i++) {
 			for (int j = 0; j < Constantes.HAUTEUR_TABLEAU; j++) {
 				buffer.drawImage(this.plateau[i][j].getImageIcon().getImage(),this.plateau[i][j].getX(), this.plateau[i][j].getY()+ Constantes.HAUTEUR_BARRE, this);
+				// on affiche les bombes si elles existes
+				if(this.plateau[i][j].getBombe()!=null)
+					buffer.drawImage(this.plateau[i][j].getBombe().getImage().getImage(),this.plateau[i][j].getBombe().getPosX(),this.plateau[i][j].getBombe().getPosY()+ Constantes.HAUTEUR_BARRE,this);
 			}
 		}
 	}

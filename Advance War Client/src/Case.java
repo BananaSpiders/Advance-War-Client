@@ -7,6 +7,7 @@ public class Case {
 	private int x,y;
 	private Unite unite;
 	private int appartient;//0 neutre, J1 Rouge,J2 Bleu, J3 Vert, J4 Jaune
+	private Bombe bombe=null;
 	
 	public Case(){}
 	
@@ -82,6 +83,14 @@ public class Case {
 
 	public void setAppartient(int appartient) {
 		this.appartient = appartient;
+	}
+
+	public Bombe getBombe() {
+		return bombe;
+	}
+
+	public void setBombe(Bombe bombe) {
+		this.bombe = bombe;
 	}
 	
 	

@@ -186,6 +186,38 @@ public class ThreadConnectionAuServeur extends Thread {
 						this.owner.notreJeu.getLesJoueurs().get(numJoueur).getListeUnites().add(new Jeep(posx, posy));
 
 
+				}// CAS BOMBE
+				else if(commande.equals("BOM")){
+					String action = str.substring(4,7);
+					String typeBombe = str.substring(7,10);
+					int numJoueur =  Integer.parseInt(str.substring(3,4))-1; // 0/1/2/3
+					int posx = Integer.parseInt(str.substring(11,13)); 	
+					int posy = Integer.parseInt(str.substring(14,16));
+					if(action.equals("NEW")){// NOUVELLE BOMBE
+						if(typeBombe.equals("MIN")) // MINE
+							this.owner.notreJeu.plateau[posx][posy].setBombe(new Mine(posx*30,posy*30,numJoueur));
+						else
+							System.out.println("BOMBE inconnu => [commande] : "+str);
+					}// LA BOMBE EXPLOSE
+					else if(action.equals("DEL")){
+						int newVie = Integer.parseInt(str.substring(16,str.length()));
+						for(int i = 0; i<4;i++)
+							for (Unite u : this.owner.notreJeu.getLesJoueurs().get(i).getListeUnites()) {
+								if ((u.getPosX() == posx*Constantes.TAILLE_CASE)
+										&& (u.getPosY()  == posy*Constantes.TAILLE_CASE))
+								{
+									if(newVie!=99)// si cest 99 ca veux dire que la bombe a explosee dans le vide
+										u.setPv(newVie);
+									if(u.getPv() <= 0){
+										this.owner.notreJeu.getLesJoueurs().get(i).getListeUnites().remove(u);
+										break;
+									}
+								}
+							}
+						this.owner.notreJeu.plateau[posx][posy].setBombe(null);
+					}
+					else
+						System.out.println("ACTION inconnu => [commande] : "+str);
 				}
 				else if(commande.equals("DPL")){
 					//exemple : DPL1x14y08x14y07

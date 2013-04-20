@@ -5,6 +5,7 @@ public class Fusilier extends Infanterie {
 		super(posX,posY);
 		this.portee=1;
 		this.att=3;
+		this.bombe=false;
 	}
 	
 	@Override

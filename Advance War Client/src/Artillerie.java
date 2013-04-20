@@ -6,7 +6,8 @@ public class Artillerie extends Vehicule {
 		this.ptsMvt=4;
 		this.deplacementRestant = 4;
 		this.def=2;
-		this.portee=8;
+		this.portee=6;
 		this.att=8;	
+		this.bombe=false;
 	}
 }

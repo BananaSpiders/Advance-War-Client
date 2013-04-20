@@ -19,7 +19,6 @@
       <case_type>SAPIN1</case_type>
       <appartient>0</appartient>
     </x2>
-FIN1
     <x3>
       <case_x>3</case_x>
       <case_y>0</case_y>
@@ -1710,7 +1709,6 @@ FIN1
       <case_x>11</case_x>
       <case_y>9</case_y>
       <case_type>ROUTEDB</case_type>
-FIN1
       <appartient>0</appartient>
     </x11>
     <x12>
@@ -1826,7 +1824,6 @@ FIN1
     <x0>
       <case_x>0</case_x>
       <case_y>10</case_y>
-FIN1
       <case_type>BAT_QG</case_type>
       <appartient>2</appartient>
     </x0>
@@ -2168,7 +2165,6 @@ FIN1
       <case_type>EAU</case_type>
       <appartient>0</appartient>
     </x26>
-FIN1
     <x27>
       <case_x>27</case_x>
       <case_y>11</case_y>
@@ -2376,7 +2372,6 @@ FIN1
       <case_y>13</case_y>
       <case_type>SAPIN2</case_type>
       <appartient>0</appartient>
-FIN1
     </x0>
     <x1>
       <case_x>1</case_x>
@@ -2854,7 +2849,6 @@ FIN1
       <case_x>19</case_x>
       <case_y>15</case_y>
       <case_type>HERBE</case_type>
-FIN1
       <appartient>0</appartient>
     </x19>
     <x20>
@@ -3192,7 +3186,6 @@ FIN1
       <appartient>0</appartient>
     </x14>
     <x15>
-FIN1
       <case_x>15</case_x>
       <case_y>17</case_y>
       <case_type>EAU</case_type>
@@ -3270,7 +3263,6 @@ FIN1
       <case_type>SAPIN1</case_type>
       <appartient>0</appartient>
     </x27>
-FIN1
     <x28>
       <case_x>28</case_x>
       <case_y>17</case_y>
@@ -3336,7 +3328,6 @@ FIN1
     <x8>
       <case_x>8</case_x>
       <case_y>18</case_y>
-FIN1
       <case_type>SAPIN2</case_type>
       <appartient>0</appartient>
     </x8>
@@ -3498,7 +3489,6 @@ FIN1
       <case_type>SAPIN2</case_type>
       <appartient>0</appartient>
     </x4>
-FIN1
     <x5>
       <case_x>5</case_x>
       <case_y>19</case_y>
