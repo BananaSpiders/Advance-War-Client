@@ -25,7 +25,7 @@ public class Menu extends JFrame implements ActionListener{
 	private JPanel contentPane;
 	// Bouton
 	JButton btnQuitter = new JButton("Quitter");
-	JButton btnCharger = new JButton("Charger");
+	JButton btnCharger = new JButton("Creer une partie");
 	JButton btnEditeur = new JButton("Editeur");
 	JButton btnJouer = new JButton("Rejoindre une partie");
 	JButton btnOption = new JButton("Options");
@@ -77,7 +77,7 @@ public class Menu extends JFrame implements ActionListener{
 		lblMenu.setFont(new Font("Snap ITC", Font.ITALIC, 18));
 		contentPane.add(lblMenu);
 		
-		btnOption.setBounds(170, 178, 80, 23);
+		btnOption.setBounds(170,286 , 80, 23);
 		btnOption.addActionListener(this);
 		contentPane.add(btnOption);
 		
@@ -89,7 +89,7 @@ public class Menu extends JFrame implements ActionListener{
 		btnEditeur.addActionListener(this);
 		contentPane.add(btnEditeur);
 		
-		btnCharger.setBounds(170, 286, 80, 23);
+		btnCharger.setBounds(130, 178, 177, 23);
 		btnCharger.addActionListener(this);
 		contentPane.add(btnCharger);
 		
@@ -141,7 +141,13 @@ public class Menu extends JFrame implements ActionListener{
 			rUP.setVisible(true);
 			this.dispose();
 		}
-		
+		/*
+		 * Bouton Creer une partie / charger
+		 */
+		if(e.getSource()== btnCharger){
+			FenetreServeur f = new FenetreServeur();
+			this.dispose();
+		}
 			
 	}
 	

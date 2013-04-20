@@ -57,8 +57,12 @@ public class ThreadConnectionAuServeur extends Thread {
 			threadTest.run();*/
 			
 			this.socketIn =new BufferedReader(new InputStreamReader(this.socketConnect.getInputStream())); // init entr�e
+			
+//			JOptionPane.showMessageDialog(null, "Socket :"+this.socketConnect);
+
 			this.socketOut = new PrintWriter(this.socketConnect.getOutputStream(),true); // init sortie
-			//JOptionPane.showMessageDialog(null, "Socket :"+this.socketConnect);
+			
+//			JOptionPane.showMessageDialog(null, "Socket :"+this.socketOut);
 
 			////////////////////////////////////
 			// Premier readline on recup�re le num joueur

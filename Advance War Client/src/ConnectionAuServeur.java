@@ -124,7 +124,7 @@ public class ConnectionAuServeur extends JFrame implements ActionListener {
 		
 		// on envoi la rï¿½fï¿½rence de l'objet actuel
 		this.notreJeu = new Jeu3(this.fileMapName,this,this.numJoueur);
-		
+		notreJeu.setVisible(false);
 		//#################################################"""""""""""
 		this.setVisible(true);
 		//#################################################"""""""""""
@@ -132,19 +132,36 @@ public class ConnectionAuServeur extends JFrame implements ActionListener {
 		
 		// Le do while qui attend que coté serveur on appuiiiiiii suuuuuur "Lancer"
 		// love
-		do{
-			System.out.println("");
-		}while(notreJeu.isPartieLancee()==false);
+//		do{
+//			System.out.println("");
+//		}while(notreJeu.isPartieLancee()==false);
+//		
+//		//#################################################"""""""""""
+//		this.setVisible(false);
+//		//#################################################"""""""""""
+//		notreJeu.setVisible(true);
 		
-		//#################################################"""""""""""
-		this.setVisible(false);
-		//#################################################"""""""""""
-		notreJeu.setVisible(true);
+		ThreadAttente threadAtt = new ThreadAttente();
+		threadAtt.start();
 	}
 	
 	
 	
-	
+	public class ThreadAttente extends Thread{
+		
+		public ThreadAttente(){
+			
+		}
+		public void run() {
+			do{
+				System.out.println("");
+			}while(notreJeu.isPartieLancee()==false);
+			//#################################################"""""""""""
+			setVisible(false);
+			//#################################################"""""""""""
+			notreJeu.setVisible(true);
+		}
+	}
 	
 	
 	
