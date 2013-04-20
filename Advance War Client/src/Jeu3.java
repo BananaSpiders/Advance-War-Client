@@ -1114,30 +1114,47 @@ public class Jeu3 extends JFrame implements MouseMotionListener, MouseListener,K
 	/////////////////////////
 	//	Methode affiche les carre deplacement
 	///////////////////////
-	public void affichePointsDeplacements(){
+	public void afficheCarreDistance(boolean trueDeplacementFalseAttaque){
 		
 		////////////////////////////////////
 		//	Carrer deplacement voulu
 		////////////////////////////////////
 		/*
 		this.cursor.getPosX();
-		this.cursor.getPosY();*///zzzz
+		this.cursor.getPosY();*///
 		
-		////////////////////////////////////
-		// Carrer portee de deplacement
-		////////////////////////////////////
-		for(int i=0; i< this.plateau.length ; i++)
-			for(int j=0 ; j<this.plateau[0].length ; j++){
-				int distance = this.calculeDistance(i,j);
-				if(distance<=this.uniteEnDeplacement.getDeplacementRestant() && (this.uniteEnDeplacement.getPosX()/30 != i || this.uniteEnDeplacement.getPosY()/30 != j)){
-					
-					// si lemplacement est accessible on laffiche en vert sinon en rouge
-					if(isUniteAllerIci(i, j, this.uniteEnDeplacement,false))
-						buffer.drawImage(new ImageIcon(this.getClass().getResource("deplacementRestant.gif")).getImage(),i*Constantes.TAILLE_CASE, j*Constantes.TAILLE_CASE  +Constantes.HAUTEUR_BARRE,this);
-					else
-						buffer.drawImage(new ImageIcon(this.getClass().getResource("deplacementRestantR.gif")).getImage(),i*Constantes.TAILLE_CASE, j*Constantes.TAILLE_CASE  +Constantes.HAUTEUR_BARRE,this);
+		
+		if(trueDeplacementFalseAttaque==true){
+			////////////////////////////////////
+			// Carrer portee de deplacement
+			////////////////////////////////////
+			for(int i=0; i< this.plateau.length ; i++)
+				for(int j=0 ; j<this.plateau[0].length ; j++){
+					int distance = this.calculeDistance(i,j);
+					if(distance<=this.uniteEnDeplacement.getDeplacementRestant() && (this.uniteEnDeplacement.getPosX()/30 != i || this.uniteEnDeplacement.getPosY()/30 != j)){
+
+						// si lemplacement est accessible on laffiche en vert sinon en rouge
+						if(isUniteAllerIci(i, j, this.uniteEnDeplacement,false))
+							buffer.drawImage(new ImageIcon(this.getClass().getResource("deplacementRestant.gif")).getImage(),i*Constantes.TAILLE_CASE, j*Constantes.TAILLE_CASE  +Constantes.HAUTEUR_BARRE,this);
+						else
+							buffer.drawImage(new ImageIcon(this.getClass().getResource("deplacementRestantR.gif")).getImage(),i*Constantes.TAILLE_CASE, j*Constantes.TAILLE_CASE  +Constantes.HAUTEUR_BARRE,this);
+					}
 				}
-			}
+		}
+		else if (trueDeplacementFalseAttaque==false){
+			////////////////////////////////////
+			// Carrer portee attaque
+			////////////////////////////////////
+			for(int i=0; i< this.plateau.length ; i++)
+				for(int j=0 ; j<this.plateau[0].length ; j++){
+					int distance = this.calculeDistance(i,j);
+					if(distance<=this.uniteEnDeplacement.getPortee() && (this.uniteEnDeplacement.getPosX()/30 != i || this.uniteEnDeplacement.getPosY()/30 != j)){
+
+						//  on affiche carre en vert
+						buffer.drawImage(new ImageIcon(this.getClass().getResource("carrePorteeTir.gif")).getImage(),i*Constantes.TAILLE_CASE, j*Constantes.TAILLE_CASE  +Constantes.HAUTEUR_BARRE,this);
+					}
+				}
+		}
 	}
 	
 	public void afficherCercle(int mode) {
@@ -1145,7 +1162,7 @@ public class Jeu3 extends JFrame implements MouseMotionListener, MouseListener,K
 		
 		if(mode==1)
 		{
-			affichePointsDeplacements();
+			afficheCarreDistance(true);// true => deplacement
 			buffer.setColor(Color.BLACK);
 			/*buffer.drawOval(uniteEnDeplacement.getPosX()-(uniteEnDeplacement.getDeplacementRestant()* Constantes.TAILLE_CASE), 
 							uniteEnDeplacement.getPosY()-(uniteEnDeplacement.getDeplacementRestant()* Constantes.TAILLE_CASE)+Constantes.TAILLE_CASE,
@@ -1156,6 +1173,7 @@ public class Jeu3 extends JFrame implements MouseMotionListener, MouseListener,K
 		
 		if(mode==2)
 		{
+			afficheCarreDistance(false);//false => attaque
 			buffer.setColor(Color.RED);
 			buffer.drawOval(uniteEnDeplacement.getPosX()-(uniteEnDeplacement.getPortee()* Constantes.TAILLE_CASE), 
 							uniteEnDeplacement.getPosY()-(uniteEnDeplacement.getPortee()* Constantes.TAILLE_CASE)+Constantes.TAILLE_CASE,
