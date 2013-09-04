@@ -135,13 +135,15 @@ public class Xml
 			//On cr�e un nouveau document JDOM avec en argument le fichier XML
 			document = sxb.build(new File("map/"+fichier+".xml"));
 		}
-		catch(Exception e){}
+		catch(Exception e){
+			System.out.println("Catch ligne 139 Exception : "+e);
+		}
 		System.out.println("map/"+fichier+".xml");
 		//On initialise un nouvel �l�ment racine avec l'�l�ment racine du document.
 		if(document != null)
 			racine = document.getRootElement();
 		else
-			System.out.println("Error lors de l'ouverture du fichier XML document => null");
+			System.out.println("Error lors de l'ouverture du fichier XML document => null ex : "+document);
 
 		//On cr�e une List contenant tous les noeuds "y" de l'Element racine
 		List listY = racine.getChildren("y");
