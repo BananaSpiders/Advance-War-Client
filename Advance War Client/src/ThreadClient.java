@@ -4,8 +4,8 @@ import java.net.*;
 
 /**
  * 
- * Cette classe représente un thread associé à UN client, elle est créée par Serveur2D.
- * Son rôle est d'attendre les messages du client et de le renvoyer à tous les autres clients.
+ * Cette classe reprï¿½sente un thread associï¿½ ï¿½ UN client, elle est crï¿½ï¿½e par Serveur2D.
+ * Son rï¿½le est d'attendre les messages du client et de le renvoyer ï¿½ tous les autres clients.
  *  
  * @author Geoffrey Yoccoz
  * @see ServeurAW
@@ -13,6 +13,7 @@ import java.net.*;
 
 public class ThreadClient extends Thread {
 
+		private boolean running; 
 		private Socket socket;
 		private String strIn;
 		private int numClient;
@@ -36,6 +37,7 @@ public class ThreadClient extends Thread {
 		
 		public ThreadClient(Socket client,int numClient, ServeurAW serveur)
 		{
+			this.running = true;
 			this.socket = client;
 			this.serveur = serveur;
 			this.numClient = numClient;
@@ -56,7 +58,7 @@ public class ThreadClient extends Thread {
 
 		public void run()
 		{
-			while(true)
+			while(this.running)
 			{
 				try
 				{
@@ -64,8 +66,9 @@ public class ThreadClient extends Thread {
 					this.serveur.sendToAllClients(this.numClient, strIn);
 				} catch (IOException e)
 				{
-					// TODO Bloc catch généré automatiquement
+					// TODO Bloc catch gï¿½nï¿½rï¿½ automatiquement
 					e.printStackTrace();
+					this.running = false;
 				}
 				
 			}
