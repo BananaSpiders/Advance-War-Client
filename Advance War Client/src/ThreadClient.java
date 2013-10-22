@@ -13,7 +13,6 @@ import java.net.*;
 
 public class ThreadClient extends Thread {
 
-		private boolean running; 
 		private Socket socket;
 		private String strIn;
 		private int numClient;
@@ -37,7 +36,6 @@ public class ThreadClient extends Thread {
 		
 		public ThreadClient(Socket client,int numClient, ServeurAW serveur)
 		{
-			this.running = true;
 			this.socket = client;
 			this.serveur = serveur;
 			this.numClient = numClient;
@@ -58,7 +56,7 @@ public class ThreadClient extends Thread {
 
 		public void run()
 		{
-			while(this.running)
+			while(true)
 			{
 				try
 				{
@@ -68,7 +66,6 @@ public class ThreadClient extends Thread {
 				{
 					// TODO Bloc catch g�n�r� automatiquement
 					e.printStackTrace();
-					this.running = false;
 				}
 				
 			}
