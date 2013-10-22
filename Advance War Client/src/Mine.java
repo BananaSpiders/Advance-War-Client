@@ -10,8 +10,8 @@ public class Mine extends Bombe{
 		super(posX,posY,numJoueur);
 		this.duree =3;
 		this.portee = 1;
-		this.degat = 3;
-		this.image= new ImageIcon(this.getClass().getResource("mine.png"));
+		this.degat = 7;
+		this.image= new ImageIcon(this.getClass().getResource("mine.gif"));
 		this.dureeRestante = this.duree;
 	}
 }

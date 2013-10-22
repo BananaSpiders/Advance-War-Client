@@ -80,8 +80,9 @@ public class MenuAction extends JDialog {
 				for(int i = 0; i<4;i++)
 					for (Unite u : owner.getLesJoueurs().get(i).getListeUnites()) {
 						if ((u.getPosX() == owner.caseCourante.getX())
-								&& (u.getPosY()  == owner.caseCourante.getY()))// on cherche lunitee qui a pose une bombe
-							if(u.isBombe()){// si lunite est bien apte a poser une bombe
+								&& (u.getPosY()  == owner.caseCourante.getY())){// on cherche lunitee qui a pose une bombe
+							System.out.println("Coucou =>"+u.isBombe());
+							if(u.isBombe() == false){// si lunite est bien apte a poser une bombe
 								int x =owner.caseCourante.getX();
 								int y =owner.caseCourante.getY();
 								// on ajoute une nouvelle mine a la case courante
@@ -101,8 +102,9 @@ public class MenuAction extends JDialog {
 								// on transmet aux autres une nouvelle mine
 								owner.owner.threadCo.getSocketOut().println("BOM"+owner.getNumeroJoueurLocal()+"NEW"+"MIN"+pos);// bom => bombe / min => mine / pos => x y
 								
-								u.setBombe(false);
+								u.setBombe(true);
 							}
+						}
 					}
 			
 				close();

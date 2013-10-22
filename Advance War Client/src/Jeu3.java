@@ -891,7 +891,7 @@ public class Jeu3 extends JFrame implements MouseMotionListener, MouseListener,K
 				buffer.drawImage(this.plateau[i][j].getImageIcon().getImage(),this.plateau[i][j].getX(), this.plateau[i][j].getY()+ Constantes.HAUTEUR_BARRE, this);
 				// on affiche les bombes si elles existes
 				if(this.plateau[i][j].getBombe()!=null)
-					buffer.drawImage(this.plateau[i][j].getBombe().getImage().getImage(),this.plateau[i][j].getBombe().getPosX(),this.plateau[i][j].getBombe().getPosY()+ Constantes.HAUTEUR_BARRE,this);
+					buffer.drawImage(this.plateau[i][j].getBombe().getImage().getImage()/*new ImageIcon(this.getClass().getResource("mine.gif")).getImage()*/,this.plateau[i][j].getBombe().getPosX(),this.plateau[i][j].getBombe().getPosY()+ Constantes.HAUTEUR_BARRE,this);
 			}
 		}
 	}
