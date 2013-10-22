@@ -355,7 +355,7 @@ public class EditeurMap extends JFrame implements MouseListener,ActionListener {
 		contentPane.add(textField_1);
 		textField_1.setColumns(10);
 
-		btnGnrerLaMap = new JButton("G\u00E9n\u00E9rer la map");
+		btnGnrerLaMap = new JButton("Generer la map");
 		btnGnrerLaMap.addActionListener(new ActionListener() {
 			// ECOUTE DU BOUTON GENERER
 			@Override
@@ -373,17 +373,17 @@ public class EditeurMap extends JFrame implements MouseListener,ActionListener {
 				// pour toutes les case on regarde si elles contiennent une base ou un qg de joueur
 				for(int i=0;i<panel_1.tabInitialise.length;i++){
 					for(int j=0;j<panel_1.tabInitialise[0].length;j++){
-						// on recupère les valeures du tableau dans le panel que l'on paint
-						// on recupère le num d'appartenance au debut de chaque nom
+						// on recupï¿½re les valeures du tableau dans le panel que l'on paint
+						// on recupï¿½re le num d'appartenance au debut de chaque nom
 						String sAppartient = panel_1.tabInitialise[i][j].split("_")[0];
-						// on recupère le nom du type de case en fin de mot
+						// on recupï¿½re le nom du type de case en fin de mot
 						String sTypeCase = panel_1.tabInitialise[i][j].split("_")[1].toUpperCase();
-						// si le nom coontenait un underscore on recolle la fin du mot coupé par le split
+						// si le nom coontenait un underscore on recolle la fin du mot coupï¿½ par le split
 						if(panel_1.tabInitialise[i][j].split("_").length ==3)
 							sTypeCase=sTypeCase+"_"+panel_1.tabInitialise[i][j].split("_")[2].toUpperCase();
 						// Si le num d'appartenance des different de 0 (neutre)
 						if(Integer.parseInt(sAppartient) != 0){
-							// si le nom est celui de batiment qg ou batiment base on met a true la cellule bTabJoueur avec -1 car il y a un de décallage (notre tableau ne prend pas en compte le joueur neutre alors que les valeures récupérées si
+							// si le nom est celui de batiment qg ou batiment base on met a true la cellule bTabJoueur avec -1 car il y a un de dï¿½callage (notre tableau ne prend pas en compte le joueur neutre alors que les valeures rï¿½cupï¿½rï¿½es si
 							if(sTypeCase.equals("BAT_QG")){
 								bTabJoueursQg[Integer.parseInt(sAppartient) -1]=true;
 							}
@@ -397,7 +397,7 @@ public class EditeurMap extends JFrame implements MouseListener,ActionListener {
 				boolean manqueBase = false;
 				String erreurManqueBatimentQG = "1 QG pour joueur(s) : ";
 				String erreurManqueBatimentBase = "1 Base pour joueur(s) : ";
-				// on regarde si toutes les données sont bien a true
+				// on regarde si toutes les donnï¿½es sont bien a true
 				for(int i=0;i<iNbJ;i++){
 					if(bTabJoueursQg[i]==false){
 						erreurManqueBatimentQG = erreurManqueBatimentQG+""+(i+1)+" | ";
@@ -420,7 +420,7 @@ public class EditeurMap extends JFrame implements MouseListener,ActionListener {
 						//////// on verrifie si le nom de map n'est deja pas pris /////////////
 						boolean continu=true;
 						if(fileExistant()){
-							switch(JOptionPane.showConfirmDialog(null, "Cette map existe deja, continuer quand même ?","Attention !", JOptionPane.WARNING_MESSAGE)  )
+							switch(JOptionPane.showConfirmDialog(null, "Cette map existe deja, continuer quand mï¿½me ?","Attention !", JOptionPane.WARNING_MESSAGE)  )
 							{
 								case 0 ://OKay
 									break;
@@ -499,9 +499,9 @@ public class EditeurMap extends JFrame implements MouseListener,ActionListener {
 			}
 		}
 		// on lenvoi a la classe Xml
-		Xml xml1 = new Xml("map\\"+this.textField_1.getText()+".xml",tableauDeCase);
+		Xml xml1 = new Xml("mapServeur\\"+this.textField_1.getText()+".xml",tableauDeCase);
 		
-		JOptionPane.showMessageDialog(null, "Création de la map \""+this.textField_1.getText()+"\" réussie !","Map", JOptionPane.INFORMATION_MESSAGE);
+		JOptionPane.showMessageDialog(null, "Crï¿½ation de la map \""+this.textField_1.getText()+"\" rï¿½ussie !","Map", JOptionPane.INFORMATION_MESSAGE);
 		/////////////////////////////////////////////////////////////////
 		// FIN DE LA CREATION DE MAP (=>>>> retour sur le menu )
 		//////////////////////////////////////////////////////////////////
@@ -527,12 +527,12 @@ public class EditeurMap extends JFrame implements MouseListener,ActionListener {
 	}
 	// verirife si le fichier existe deja
 	public boolean fileExistant(){
-		File repertoire = new File(System.getProperty("user.dir")+"\\map");// on recupere le repertoire courant + \map pour aller dans les map
+		File repertoire = new File(System.getProperty("user.dir")+"\\mapServeur");// on recupere le repertoire courant + \map pour aller dans les map
 		String [] listefichiers; 
 		int i;
 		boolean leFichierExisteDeja=false;
 		listefichiers=repertoire.list(); // transmet la liste des fichier dans un tableau de Strings
-		for(i=0;i<listefichiers.length;i++){ // pour toute cette liste on verrifie les egalitées
+		for(i=0;i<listefichiers.length;i++){ // pour toute cette liste on verrifie les egalitï¿½es
 			//System.out.println(listefichiers[i]);
 			if(listefichiers[i].equals(this.textField_1.getText()+".xml"))
 				leFichierExisteDeja=true;
